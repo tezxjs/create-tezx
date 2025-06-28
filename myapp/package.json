@@ -1,0 +1,32 @@
+{
+        "name": "myapp",
+        "version": "1.0.0",
+        "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration. Fully compatible with Node.js, Deno, and Bun.",
+        "scripts": {
+          "build:cjs": "tsc --module CommonJS --outDir dist/cjs --removeComments",
+          "build:esm": "tsc --module ESNext --outDir dist --removeComments",
+          "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
+          "build": "npm run build:cjs && npm run build:esm && npm run build:dts",
+          "start": "node dist/index.js",
+          "dev": "bun run --hot --watch src/index.ts"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/tezxjs/tezx-app-example"
+        },
+        "keywords": [],
+        "author": "",
+        "license": "ISC",
+        "bugs": {
+          "url": "https://github.com/tezxjs/tezx-app-example"
+        },
+        "homepage": "https://github.com/tezxjs/tezx-app-example",
+        "dependencies": {
+          "typescript": "^5.8.2",
+          "tezx": "^2.0.3",
+          "tsx": "^4.19.2"
+        },
+        "devDependencies": {
+          "@types/node": "^22.13.14"
+        }
+      }

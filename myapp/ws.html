@@ -1,4 +1,4 @@
-export let ws = `
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -120,7 +120,7 @@ export let ws = `
         </div>
 
         <script>
-            const ws = new WebSocket(\`ws://\${location.host}/ws\`);
+            const ws = new WebSocket(`ws://${location.host}/ws`);
             const messages = document.getElementById("messages");
             const input = document.getElementById("input");
 
@@ -129,7 +129,7 @@ export let ws = `
             };
 
             ws.onmessage = (event) => {
-                appendMessage(\`Server: \${event.data}\`, "server");
+                appendMessage(`Server: ${event.data}`, "server");
             };
 
             ws.onclose = () => {
@@ -137,13 +137,13 @@ export let ws = `
             };
 
             ws.onerror = (error) => {
-                appendMessage(\`Error: \${error}\`, "system");
+                appendMessage(`Error: ${error}`, "system");
             };
 
             function appendMessage(message, type = "client") {
                 const div = document.createElement("div");
                 div.textContent = message;
-                div.className = \`message \${type}\`;
+                div.className = `message ${type}`;
                 messages.appendChild(div);
                 messages.scrollTop = messages.scrollHeight;
             }
@@ -152,7 +152,7 @@ export let ws = `
                 const message = input.value;
                 if (message && ws.readyState === WebSocket.OPEN) {
                     ws.send(message);
-                    appendMessage(\`Client: \${message}\`, "client");
+                    appendMessage(`Client: ${message}`, "client");
                     input.value = "";
                 }
             }
@@ -166,5 +166,3 @@ export let ws = `
         </script>
     </body>
 </html>
-`
-

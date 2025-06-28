@@ -1,13 +1,12 @@
+# ⚡ Create TezX
+
+Easily scaffold a new [TezX](https://github.com/tezxjs/tezx) project using official starter templates.
 
 ---
 
-# Create TezX
+## 🚀 Quick Start
 
-Create a TezX project from official starter templates.
-
-## Quick Start
-
-Starter templates are available for common platforms. Use one of the following `create-tezx` commands:
+Starter templates are available for common runtimes and package managers. Run one of the following commands:
 
 ```bash
 # npm
@@ -26,46 +25,66 @@ bun create tezx@latest
 deno run -A npm:create-tezx@latest
 ````
 
-## Options
+---
 
-### `-t, --template <template>`
+## ⚙️ CLI Options
 
-Specify the desired template to skip interactive selection.
+You can skip the interactive prompts by passing options directly.
 
-```bash
-npm create tezx@latest ./my-app --template minimal
-```
+### `-t`, `--template <template>`
 
-### `-i, --install`
-
-Automatically install dependencies after the project is created.
+Use a specific template.
 
 ```bash
-npm create tezx@latest ./my-app --install
+npm create tezx@latest my-app --template minimal
 ```
 
-### `-p, --pm <pnpm|bun|npm|yarn>`
+### `-i`, `--install`
 
-Choose your preferred package manager.
+Automatically install dependencies after setup.
 
 ```bash
-npm create tezx@latest ./my-app -- --pm bun
+npm create tezx@latest my-app --install
 ```
 
-## Supported Templates
+### `-p`, `--pm <npm|pnpm|bun|yarn>`
 
-<!-- * `minimal` - A minimal TypeScript setup
-* `next` - Next.js starter with TezX support
-* `express` - Node.js (Express) starter with TypeScript
-* `solid` - SolidJS with routing and SSR -->
+Specify which package manager to use.
 
-> More templates coming soon!
+```bash
+npm create tezx@latest my-app -- --pm bun
+```
 
-## Author
+### `--ts`, `-ts`
 
-Rakibul Islam
-[https://github.com/rakibul-islam](https://github.com/srakib17)
+Enable TypeScript support.
 
-and TezX contributors
+```bash
+npm create tezx@latest my-app --ts
+```
+
+### `--env`, `--runtime`, `-env`, `-runtime`
+
+Set the runtime environment: `node`, `bun`, or `deno`.
+
+```bash
+npm create tezx@latest my-app --runtime bun
+```
+
+---
+
+## 📁 Supported Templates
+
+> ✅ More templates coming soon!
+
+* `minimal` – Minimal TypeScript setup
+* `websocket` – TezX with built-in WebSocket support `--template ws`
+
+---
+
+## 🧑‍💻 Author
+
+Built by [Rakibul Islam](https://github.com/srakib17)
+and [TezX](https://github.com/tezxjs/tezx) contributors.
 
 ---

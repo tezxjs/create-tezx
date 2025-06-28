@@ -1,0 +1,287 @@
+#!/usr/bin/env node
+import N from"node:readline";import{execSync as T}from"node:child_process";import{existsSync as z,mkdirSync as x,writeFileSync as g}from"node:fs";import{join as l,resolve as j}from"node:path";import E from"node:readline";var y=`
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TezX WebSocket Demo</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background: #f7f9fc;
+                padding: 30px;
+                color: #333;
+            }
+
+            h1 {
+                text-align: center;
+                color: #444;
+                margin-bottom: 30px;
+            }
+
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+                padding: 20px;
+            }
+
+            #messages {
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                padding: 12px;
+                height: 250px;
+                overflow-y: auto;
+                background-color: #fafafa;
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+
+            #input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            .buttons {
+                display: flex;
+                gap: 10px;
+                justify-content: flex-end;
+            }
+
+            button {
+                padding: 8px 16px;
+                font-size: 14px;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            button:hover {
+                opacity: 0.9;
+            }
+
+            button:active {
+                transform: scale(0.97);
+            }
+
+            .send-btn {
+                background-color: #4caf50;
+                color: white;
+            }
+
+            .ping-btn {
+                background-color: #2196f3;
+                color: white;
+            }
+
+            .message {
+                margin-bottom: 8px;
+                padding: 6px 10px;
+                border-radius: 4px;
+            }
+
+            .message.client {
+                background: #e8f5e9;
+                color: #2e7d32;
+            }
+
+            .message.server {
+                background: #e3f2fd;
+                color: #1565c0;
+            }
+
+            .message.system {
+                background: #fff3e0;
+                color: #ef6c00;
+                font-style: italic;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>TezX WebSocket Demo</h1>
+        <div class="container">
+            <div id="messages"></div>
+            <input id="input" type="text" placeholder="Type a message..." />
+            <div class="buttons">
+                <button class="send-btn" onclick="sendMessage()">Send</button>
+                <button class="ping-btn" onclick="sendPing()">Ping</button>
+            </div>
+        </div>
+
+        <script>
+            const ws = new WebSocket(\`ws://\${location.host}/ws\`);
+            const messages = document.getElementById("messages");
+            const input = document.getElementById("input");
+
+            ws.onopen = () => {
+                appendMessage("Connected to WebSocket server", "system");
+            };
+
+            ws.onmessage = (event) => {
+                appendMessage(\`Server: \${event.data}\`, "server");
+            };
+
+            ws.onclose = () => {
+                appendMessage("Disconnected from WebSocket server", "system");
+            };
+
+            ws.onerror = (error) => {
+                appendMessage(\`Error: \${error}\`, "system");
+            };
+
+            function appendMessage(message, type = "client") {
+                const div = document.createElement("div");
+                div.textContent = message;
+                div.className = \`message \${type}\`;
+                messages.appendChild(div);
+                messages.scrollTop = messages.scrollHeight;
+            }
+
+            function sendMessage() {
+                const message = input.value;
+                if (message && ws.readyState === WebSocket.OPEN) {
+                    ws.send(message);
+                    appendMessage(\`Client: \${message}\`, "client");
+                    input.value = "";
+                }
+            }
+
+            function sendPing() {
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send("ping");
+                    appendMessage("Client: ping", "client");
+                }
+            }
+        </script>
+    </body>
+</html>
+`;import h from"node:readline";async function b(s,e){return new Promise(n=>{let t=0,i=h.createInterface({input:process.stdin,output:process.stdout});h.emitKeypressEvents(process.stdin,i),process.stdin.isTTY&&process.stdin.setRawMode(!0);let a=()=>{process.stdout.write("\x1B[2J\x1B[0f"),console.log(s+` (Use \u2191 \u2193 arrows, Enter to confirm)
+`),e.forEach((p,r)=>{console.log(`${r===t?"\u{1F449}":"  "} ${r===t?"\x1B[36m":"\x1B[0m"}${p}\x1B[0m`)})},c=(p,r)=>{if(r.name==="up")t=(t-1+e.length)%e.length,a();else if(r.name==="down")t=(t+1)%e.length,a();else{if(r.name==="return")return n(e[t]);r.name==="c"&&r.ctrl&&(process.stdin.off("keypress",c),process.stdin.isTTY&&process.stdin.setRawMode(!1),i.close(),process.exit(1))}};a(),process.stdin.on("keypress",c)})}var v={reset:"\x1B[0m",bold:"\x1B[1m",underline:"\x1B[4m",gray:"\x1B[90m",white:"\x1B[97m",black:"\x1B[30m",red:"\x1B[31m",green:"\x1B[32m",yellow:"\x1B[33m",blue:"\x1B[34m",magenta:"\x1B[35m",cyan:"\x1B[36m",bgRed:"\x1B[41m",bgGreen:"\x1B[42m",bgYellow:"\x1B[43m",bgBlue:"\x1B[44m",bgMagenta:"\x1B[45m",bgCyan:"\x1B[46m",bgWhite:"\x1B[47m",orange:"\x1B[38;2;255;88;30m",bgOrange:"\x1B[48;2;255;88;30m"};function o(s,e){return`${v[e]}${s}${v.reset}`}function M(s){let e=0,n=["\u280B","\u2819","\u2839","\u2838","\u283C","\u2834","\u2826","\u2827","\u2807","\u280F"],t=setInterval(()=>{process.stdout.write(`\r${n[e=++e%n.length]} ${s}`)},80);return()=>{clearInterval(t),process.stdout.write(`\r\u2705 Done!                             
+`)}}var S=E.createInterface({input:process.stdin,output:process.stdout}),d=(s,e="")=>new Promise(n=>{S.question(e?`${s} (${e}): `:s,t=>{n(t.trim()||e)})});async function k(){console.log(o(`
+\u26A1 TezX App Creator (no dependencies CLI)
+`,"orange"));let s=await d(o("\u{1F4E6} Project name: ","magenta"));if(!s)return console.log(o("\u274C Project name required.","red")),process.exit(1);let e=j(process.cwd(),s);if(z(e))return console.log("\u274C Folder already exists."),process.exit(1);let n=(await d("\u{1F7E6} Use TypeScript? (y/N): ")).toLowerCase()==="y";let t=await b("\u{1F4BB} Runtime?",["node","bun","deno"]);let i=(await d("\u{1F310} Enable WebSocket? (y/N): ")).toLowerCase()==="y";let a=(await d("\u{1F4C1} Use static folder? (y/N): ")).toLowerCase()==="y",c=a?await d("\u{1F4C2} Static folder name? (default: public): "):"",p=await b("\u{1F4E6} Choose your package manager",["npm","bun","yarn","pnpm"]),r=(await d("\u{1F4E5} Install dependencies now? (y/N): ")).toLowerCase()==="y";console.log(`
+\u{1F4C1} Creating project: ${s}...
+`);let f=M("Creating Project");if(x(e,{recursive:!0}),i&&g(l(e,"ws.html"),y),a){let u=l(e,c||"public");x(u,{recursive:!0})}x(l(e,"src"),{recursive:!0});let w=l(e,n?"src/index.ts":"src/index.js"),$=`
+import { TezX } from "tezx";
+import { ${t}Adapter ,loadEnv} from "tezx/${t}";
+${i?`import { upgradeWebSocket } from "tezx/ws";
+`:""}
+const app = new TezX({
+    env: loadEnv()
+    // Additional options
+});
+app.get("/", (ctx) => ctx.text("Hello from TezX (${t})"));
+
+${a?`app.static("${c||"public"}");`:""}
+${i?`
+const socket: WebSocket[] = [];
+app.get(
+  "/ws",
+  upgradeWebSocket(
+    (ctx) => {
+      return {
+        // make sure it is work with nodejs
+        open: (ws) => {
+            socket.push(ws);
+            console.log("WebSocket connected");
+            ws.send("\u{1F44B} Welcome to TezX WebSocket!");
+        },
+        message: (ws, msg) => {
+            if (typeof msg === "string" && msg === "ping") {
+                ws.send("pong \u{1F3D3}");
+            } else if (msg !== undefined) {
+                ws.send("Echo: " + msg);
+            }
+        },
+        close: (ws, data) => {
+            console.log(\`WebSocket closed: \${ data?.reason ?? "No reason provided"}\`);
+        },
+      };
+    },
+    {
+      maxPayload: 2 * 1024 * 1024, // 2MB
+      perMessageDeflate: {
+        threshold: 1024, // Compress messages > 1KB
+      },
+    },
+  ),
+  (ctx) => {
+    return ctx.sendFile("ws.html");
+  },
+);
+`:""}
+
+${t}Adapter(app).listen(3000, () => {
+  console.log("\u{1F680} TezX running on http://localhost:3000");
+});
+`;if(g(w,$.trim()),n){let u=`
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "CommonJS",
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "removeComments": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": true,
+  },
+  "include": [
+    "src",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests"
+  ]
+}
+  `.trim();g(l(e,"tsconfig.json"),u)}let C=`{
+    "name": "${s}",
+    "version": "1.0.0",
+    "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration. Fully compatible with Node.js, Deno, and Bun.",
+    "scripts": {
+      "build:cjs": "tsc --module CommonJS --outDir dist/cjs --removeComments",
+      "build:esm": "tsc --module ESNext --outDir dist --removeComments",
+      "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
+      "build": "npm run build:cjs && npm run build:esm && npm run build:dts",
+      "start": "node dist/index.js",
+      ${t=="node"?'"dev": "tsx watch src/index.ts" ':t=="bun"?'"dev": "bun run --hot --watch src/index.ts"':'"dev": "deno run --watch --allow-all --unstable-sloppy-imports src/index.ts" '}
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/tezxjs/tezx-app-example"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/tezxjs/tezx-app-example"
+    },
+    "homepage": "https://github.com/tezxjs/tezx-app-example",
+    "dependencies": {
+      ${n?'"typescript": "^5.8.2",':""}
+      "tezx": "^2.0.3",
+      "tsx": "^4.19.2"${i&&t=="node"?`,
+"ws": "^8.18.1"`:""}
+    },
+    "devDependencies": {
+      "@types/node": "^22.13.14"
+    }
+  }`.trim();g(l(e,"package.json"),C),S.close();let m={bun:{cd:"cd "+s,install:"bun install",dev:"bun dev"},npm:{cd:"cd "+s,install:"npm install",dev:"npm run dev"},yarn:{cd:"cd "+s,install:"yarn",dev:"yarn dev"},pnpm:{cd:"cd "+s,install:"pnpm install",dev:"pnpm run dev"}}[p];r&&T(m?.install,{cwd:e,stdio:"inherit"}),console.log(o(`
+\u2705 TezX project "${s}" is ready!
+`,"green")),console.log(o("\u{1F9F0} Summary of your configuration:","cyan")),console.log(`\u{1F4C1} Project Name: ${o(s,"yellow")}`),console.log(`\u{1F7E6} TypeScript: ${o(n?"Yes":"No",n?"green":"gray")}`),console.log(`\u{1F4BB} Runtime: ${o(t,"blue")}`),console.log(`\u{1F310} WebSocket: ${o(i?"Enabled":"Disabled",i?"green":"gray")}`),console.log(`\u{1F4C1} Static Folder: ${o(a?c||"public":"Not Used",a?"green":"gray")}`),console.log(`\u{1F4E6} Package Manager: ${o(p,"magenta")}`),console.log(`\u{1F4E5} Dependencies Installed: ${o(r?"Yes":"No",r?"green":"red")}
+`),console.log(o("\u{1F449} Next Steps:","cyan")),console.log(o(`   ${m?.cd}`,"white")),r||console.log(o(`   ${m?.install}`,"white")),console.log(o(`   ${m?.dev}`,"white")),console.log(""),f()}var P=N.createInterface({input:process.stdin,output:process.stdout});(async()=>{let s=process.argv[2],e=(t,i)=>{i.name==="c"&&i.ctrl&&(process.stdin.off("keypress",e),process.stdin.isTTY&&process.stdin.setRawMode(!1),P.close(),process.exit(1))};switch(process.stdin.on("keypress",e),process.argv[2]){case"--t":case"--template":console.log("template use here");break;default:k();break}})();
+//!done

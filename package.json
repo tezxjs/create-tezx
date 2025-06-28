@@ -1,0 +1,34 @@
+{
+  "name": "create-tezx",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build:pkgroll": "pkgroll --clean-dist --minify",
+    "build:es": "node build.mjs",
+    "build:cjs": "tsc --module CommonJS --outDir dist/cjs --removeComments",
+    "build:esm": "tsc --module ESNext --outDir dist --removeComments",
+    "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:dts",
+    "bun": "bun run --hot --watch src/index.ts",
+    "node": "nodemon app.ts",
+    "deno": "deno run --watch --allow-all --unstable-sloppy-imports  app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@types/node": "^24.0.7",
+    "pkgroll": "^2.13.1",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.5"
+  }
+}

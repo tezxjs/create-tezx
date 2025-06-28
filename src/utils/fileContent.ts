@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { TemplateObjectType } from "../template";
+import { TemplateObjectType } from "../template/index.js";
 
 export let index = ({
   ts,

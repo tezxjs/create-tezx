@@ -2,11 +2,11 @@ import { execSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path, { join, resolve } from "node:path";
 import readline from "node:readline";
+import { TemplateContent, TemplateObjectType } from "../template/index.js";
 import { ws } from "../ws.js";
 import { arrowSelect } from "./arrowSelect.js";
 import { colorText } from "./colors.js";
 import { index, packageJson } from "./fileContent.js";
-import { TemplateContent } from "../template/index.js";
 
 export type Config = {
   directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env", string>
@@ -63,7 +63,10 @@ export async function create(config: Config) {
   let useWS = false;
   let staticFolder = 'public';
   let useStatic = true;
-  let template = "";
+  let template: TemplateObjectType = {
+    content: "",
+    file: []
+  };
   if (options?.["t"] || options?.["template"]) {
     const templateKey = options["t"] || options["template"];
     useWS = templateKey?.toLowerCase() == 'ws';

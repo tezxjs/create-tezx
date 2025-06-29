@@ -1,13 +1,8 @@
 import readline from "node:readline";
 
-export async function arrowSelect(promptText: string, options: string[]): Promise<string> {
+export async function arrowSelect(rl: any, promptText: string, options: string[]): Promise<string> {
     return new Promise((resolve) => {
         let selected = 0;
-
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-        });
 
         readline.emitKeypressEvents(process.stdin, rl);
         if (process.stdin.isTTY) process.stdin.setRawMode(true);
@@ -33,11 +28,6 @@ export async function arrowSelect(promptText: string, options: string[]): Promis
             } else if (key.name === "return") {
                 // cleanup();
                 return resolve(options[selected]);
-            } else if (key.name === "c" && key.ctrl) {
-                process.stdin.off("keypress", onKeyPress);
-                if (process.stdin.isTTY) process.stdin.setRawMode(false);
-                rl.close();
-                process.exit(0);
             }
         };
         // const cleanup = () => {

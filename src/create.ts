@@ -7,10 +7,9 @@ import { TemplateObjectType } from "./template/utils.js";
 import { arrowSelect } from "./utils/arrowSelect.js";
 import { colorText } from "./utils/colors.js";
 import { index, packageJson } from "./utils/fileContent.js";
-import { ws } from "./ws.js";
 
 export type Config = {
-  directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env" | "useWS" | "useStatic" | "staticFolder", string>
+  directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env" | "useStatic" | "staticFolder", string>
 };
 
 export let packageManager = ["npm", "bun", "yarn", "pnpm"];
@@ -64,9 +63,8 @@ export async function create(config: Config) {
 
   let ts = false;
   let checkEnv = (options?.["env"] || options?.["runtime"]);
-  const env = runtime?.includes(checkEnv) ? checkEnv : await arrowSelect("💻 Runtime?", runtime);
+  const env = runtime?.includes(checkEnv) ? checkEnv : await arrowSelect(rl, "💻 Runtime?", runtime);
 
-  let useWS = !!options?.['useWS'] || false;
   let staticFolder = options?.['staticFolder'] || 'public';
   let useStatic = true;
   let template: TemplateObjectType = {
@@ -74,29 +72,26 @@ export async function create(config: Config) {
     import: [],
     files: []
   };
+
   if (options?.["t"] || options?.["template"]) {
     const templateKey = options["t"] || options["template"];
-    useWS = templateKey?.toLowerCase() == 'ws';
-    if (!useWS) {
-      const availableTemplate = TemplateContent?.[templateKey as keyof typeof TemplateContent];
-      if (!availableTemplate) {
-        console.error(`❌ Unknown template: "${templateKey}"`);
-        console.error(`ℹ️ Available templates: ${Object.keys(TemplateContent).join(", ")}`);
-        process.exit(0);
-      }
-      template = availableTemplate;
+    const availableTemplate = TemplateContent?.[templateKey as keyof typeof TemplateContent];
+    if (!availableTemplate) {
+      console.error(`❌ Unknown template: "${templateKey}"`);
+      console.error(`ℹ️ Available templates: ${Object.keys(TemplateContent).join(", ")}`);
+      process.exit(0);
     }
+    template = availableTemplate;
   }
   else {
     ts = !!(options?.['ts'] || (await ask("🟦 Use TypeScript? (y/N): ") as any).toLowerCase() === "y");
-    useWS = !!options?.['useWS'] || (await ask("🌐 Enable WebSocket? (y/N): ") as any).toLowerCase() === "y";
     useStatic = !!options?.['useStatic'] || (await ask("📁 Use static folder? (y/N): ") as any).toLowerCase() === "y";
     staticFolder = useStatic ? (options?.['staticFolder'] || await ask("📂 Static folder name? (default: public): ")) : "";
   }
 
 
   let checkPackageManager = (options?.["pm"] || options?.["p"]);
-  const choice = packageManager?.includes(checkPackageManager) ? checkPackageManager : await arrowSelect("📦 Choose your package manager", packageManager);
+  const choice = packageManager?.includes(checkPackageManager) ? checkPackageManager : await arrowSelect(rl, "📦 Choose your package manager", packageManager);
   const install =
     (options?.["i"] === "true" || options?.["install"] === "true") ||
     ((await ask("📥 Install dependencies now? (y/N): ")).toLowerCase() === "y");
@@ -108,9 +103,6 @@ export async function create(config: Config) {
   // const template = join(__dirname, ts ? "template-ts" : "template-js");
   // cpSync(template, root, { recursive: true });
 
-  if (useWS) {
-    writeFileSync(join(root, 'ws.html'), ws);
-  }
   // Optional Static Folder
   if (useStatic) {
     const staticDir = join(root, staticFolder || "public");
@@ -126,11 +118,10 @@ export async function create(config: Config) {
     ts: !!ts,
     env: env,
     staticFolder: staticFolder,
-    useWS: useWS,
     useStatic: useStatic
   })
 
-  packageJson({ directory: directory, env: env, root: root, ts: !!ts, useWS: useWS, template })
+  packageJson({ directory: directory, env: env, root: root, ts: !!ts, template })
 
   rl.close();
   const step = {
@@ -168,9 +159,12 @@ export async function create(config: Config) {
   console.log(colorText(`\n✅ TezX project "${projectName}" is ready!\n`, "green"));
   console.log(colorText("🧰 Summary of your configuration:", "cyan"));
   console.log(`📁 Project Name: ${colorText(projectName, "yellow")}`);
+  let templateName = options?.['t'] || options?.['template'];
+  if (templateName) {
+    console.log(`📁 Template Name: ${colorText(templateName, "orange")}`);
+  }
   console.log(`🟦 TypeScript: ${colorText(ts ? "Yes" : "No", ts ? "green" : "gray")}`);
   console.log(`💻 Runtime: ${colorText(env, "blue")}`);
-  console.log(`🌐 WebSocket: ${colorText(useWS ? "Enabled" : "Disabled", useWS ? "green" : "gray")}`);
   console.log(`📁 Static Folder: ${colorText(useStatic ? staticFolder || "public" : "Not Used", useStatic ? "green" : "gray")}`);
   console.log(`📦 Package Manager: ${colorText(choice, "magenta")}`);
   console.log(`📥 Dependencies Installed: ${colorText(install ? "Yes" : "No", install ? "green" : "red")}\n`);

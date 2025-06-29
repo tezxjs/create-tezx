@@ -36,7 +36,7 @@ You can skip the interactive prompts by passing options directly.
 Use a specific template.
 
 ```bash
-npm create tezx@latest my-app --template minimal
+npm create tezx@latest my-app -- --template minimal
 ```
 
 ### `-i`, `--install`
@@ -44,7 +44,7 @@ npm create tezx@latest my-app --template minimal
 Automatically install dependencies after setup.
 
 ```bash
-npm create tezx@latest my-app --install
+npm create tezx@latest my-app -- --install
 ```
 
 ### `-p`, `--pm <npm|pnpm|bun|yarn>`
@@ -52,7 +52,7 @@ npm create tezx@latest my-app --install
 Specify which package manager to use.
 
 ```bash
-npm create tezx@latest my-app --pm bun
+npm create tezx@latest my-app -- --pm bun
 ```
 
 ### `--ts`, `-ts`
@@ -60,7 +60,7 @@ npm create tezx@latest my-app --pm bun
 Enable TypeScript support.
 
 ```bash
-npm create tezx@latest my-app --ts
+npm create tezx@latest my-app -- --ts
 ```
 
 ### `--env`, `--runtime`, `-env`, `-runtime`
@@ -68,12 +68,16 @@ npm create tezx@latest my-app --ts
 Set the runtime environment: `node`, `bun`, or `deno`.
 
 ```bash
-npm create tezx@latest my-app --runtime bun
+npm create tezx@latest my-app -- --runtime bun
 ```
 
 ### `--y`, `--yes`, `-y`, `-yes`
 
 Want to skip all prompts?
+
+```bash
+npm create tezx@latest my-app -- --yes
+```
 
 ---
 

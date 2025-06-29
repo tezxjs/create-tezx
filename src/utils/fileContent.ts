@@ -6,14 +6,13 @@ export let index = ({
   ts,
   template,
   root,
-  env, useWS = false, useStatic = false, staticFolder }: {
+  env, useStatic = false, staticFolder }: {
     ts: boolean,
     template?: TemplateObjectType,
     root: string,
     env: string,
     useStatic?: boolean,
     staticFolder: string,
-    useWS?: boolean,
   }) => {
 
   const mainFile = join(root, ts ? "src/index.ts" : "src/index.js");
@@ -25,7 +24,6 @@ import { TezX } from "tezx";
 import { ${env}Adapter ,loadEnv} from "tezx/${env}";
 import { logger } from "tezx/middleware";
 ${template?.import?.join("\n")}
-${useWS ? `import { upgradeWebSocket } from "tezx/ws";\n` : ""}
 const app = new TezX({
     env: loadEnv(),
     debugMode: true,
@@ -37,44 +35,6 @@ app.get("/", (ctx) => ctx.text("Hello from TezX (${env})"));
 
 ${useStatic ? `app.static("${staticFolder || "public"}");` : ""}
 ${template?.content ? `\n${template?.content?.trim()}\n` : ""}
-${useWS ? `
-const socket: WebSocket[] = [];
-app.get(
-  "/ws",
-  upgradeWebSocket(
-    (ctx) => {
-      return {
-        // make sure it is work with nodejs
-        open: (ws) => {
-            socket.push(ws);
-            console.log("WebSocket connected");
-            ws.send("👋 Welcome to TezX WebSocket!");
-        },
-        message: (ws, msg) => {
-            if (typeof msg === "string" && msg === "ping") {
-                ws.send("pong 🏓");
-            } else if (msg !== undefined) {
-                ws.send("Echo: " + msg);
-            }
-        },
-        close: (ws, data) => {
-            console.log(\`WebSocket closed: \${ data?.reason ?? "No reason provided"}\`);
-        },
-      };
-    },
-    {
-      maxPayload: 2 * 1024 * 1024, // 2MB
-      perMessageDeflate: {
-        threshold: 1024, // Compress messages > 1KB
-      },
-    },
-  ),
-  (ctx) => {
-    return ctx.sendFile("ws.html");
-  },
-);
-` : ""}
-
 ${env}Adapter(app).listen(3000, () => {
   console.log("🚀 TezX running on http://localhost:3000");
 });
@@ -122,6 +82,7 @@ export let packageJson = ({ template, root, directory, env, ts, useWS, }: { temp
   let json = `{
         "name": "${directory}",
         "version": "1.0.0",
+        "type": "module",
         "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration. Fully compatible with Node.js, Deno, and Bun.",
         "scripts": {
           "build:cjs": "tsc --module CommonJS --outDir dist/cjs --removeComments",

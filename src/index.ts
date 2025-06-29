@@ -67,7 +67,6 @@ import { showVersion } from "./showVersion.js";
     if (options["y"] === "true" || options["yes"] === "true") {
         // auto set values
         config.options["ts"] = "true";
-        config.options["useWS"] = "true";
 
         config.options["useStatic"] = "true";
         config.options["staticFolder"] = "public";

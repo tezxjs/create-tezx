@@ -13,7 +13,7 @@ app.use([logger()]);
 
 app.get("/", (ctx) => ctx.text("Hello from TezX (bun)"));
 
-app.static("public");
+app.static("s");
 
 
 const socket: WebSocket[] = [];

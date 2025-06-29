@@ -50,7 +50,7 @@ export async function create(config: Config) {
   console.log(colorText("\n⚡ TezX App Creator (no dependencies CLI)\n", 'orange'));
 
   if (!directory) {
-    directory = await ask(colorText("📦 Target directory: ", "magenta"));
+    directory = await ask(colorText("📦 Project name: ", "magenta"));
     if (!directory) {
       console.log(colorText("❌ Project name required.", "red"));
       process.exit(0);
@@ -61,7 +61,7 @@ export async function create(config: Config) {
   const root = resolve(process.cwd(), directory);
   // if (existsSync(root)) return console.log("❌ Folder already exists."), process.exit(1);
 
-  let ts = false;
+  let ts = !!options?.['ts'];
   let checkEnv = (options?.["env"] || options?.["runtime"]);
   const env = runtime?.includes(checkEnv) ? checkEnv : await arrowSelect(rl, "💻 Runtime?", runtime);
 
@@ -111,6 +111,34 @@ export async function create(config: Config) {
   }
   // Customize main.ts file
 
+  const step = {
+    bun: {
+      cd: "cd " + directory,
+      install: "bun install",
+      dev: "bun dev",
+      build: "bun build:cjs && bun build:esm && bun build:dts",
+    },
+    npm: {
+      cd: "cd " + directory,
+      install: "npm install",
+      dev: "npm run dev",
+      build: "npm run build:cjs && npm run build:esm && npm run build:dts",
+    },
+    yarn: {
+      cd: "cd " + directory,
+      install: "yarn",
+      dev: "yarn dev",
+      build: "yarn build:cjs && yarn build:esm && yarn build:dts",
+    },
+    pnpm: {
+      cd: "cd " + directory,
+      install: "pnpm install",
+      dev: "pnpm run dev",
+      build: "pnpm run build:cjs && pnpm run build:esm && pnpm run build:dts",
+    }
+  };
+
+  let choiceStep = step[choice as keyof typeof step];
 
   index({
     template,
@@ -121,32 +149,10 @@ export async function create(config: Config) {
     useStatic: useStatic
   })
 
-  packageJson({ directory: directory, env: env, root: root, ts: !!ts, template })
+  packageJson({ projectName: projectName, env: env, root: root, ts: !!ts, template, choiceStep: choiceStep })
 
   rl.close();
-  const step = {
-    bun: {
-      cd: "cd " + directory,
-      install: "bun install",
-      dev: "bun dev"
-    },
-    npm: {
-      cd: "cd " + directory,
-      install: "npm install",
-      dev: "npm run dev"
-    },
-    yarn: {
-      cd: "cd " + directory,
-      install: "yarn",
-      dev: "yarn dev"
-    },
-    pnpm: {
-      cd: "cd " + directory,
-      install: "pnpm install",
-      dev: "pnpm run dev"
-    }
-  };
-  let choiceStep = step[choice as keyof typeof step];
+
 
   template?.files?.forEach((r) => {
     let folder = path.join(root, path.dirname(r?.path));

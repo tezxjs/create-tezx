@@ -71,7 +71,14 @@ ${env}Adapter(app).listen(3000, () => {
   writeFileSync(mainFile, code.trim());
 }
 
-export let packageJson = ({ template, root, directory, env, ts, useWS, }: { template: TemplateObjectType, root: string, directory: string, env: string, ts?: boolean, useWS?: boolean }) => {
+export let packageJson = ({ template, root, projectName, env, ts, useWS, choiceStep }: {
+  choiceStep: {
+    cd: string;
+    install: string;
+    dev: string;
+    build: string;
+  }, template: TemplateObjectType, root: string, projectName: string, env: string, ts?: boolean, useWS?: boolean
+}) => {
   let install: string[] = [];
   if (Array.isArray(template?.package)) {
     template?.package?.forEach((p) => {
@@ -79,44 +86,53 @@ export let packageJson = ({ template, root, directory, env, ts, useWS, }: { temp
       install.push(`"${npm?.[1]}": "${version}"`)
     })
   }
-  let json = `{
-        "name": "${directory}",
-        "version": "1.0.0",
-        "type": "module",
-        "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration. Fully compatible with Node.js, Deno, and Bun.",
-        "scripts": {
-          "build:cjs": "tsc --module CommonJS --outDir dist/cjs --removeComments",
-          "build:esm": "tsc --module ESNext --outDir dist --removeComments",
-          "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
-          "build": "npm run build:cjs && npm run build:esm && npm run build:dts",
-          "start": "node dist/index.js",
-          ${(
-      env == 'node' ?
-        `"dev": "tsx watch src/index.ts" ` :
-        env == "bun" ?
-          `"dev": "bun run --hot --watch src/index.ts"` :
-          `"dev": "deno run --watch --allow-all --unstable-sloppy-imports src/index.ts" `
-    )}
-        },
-        "repository": {
-          "type": "git",
-          "url": "git+https://github.com/tezxjs/tezx-app-example"
-        },
-        "keywords": [],
-        "author": "",
-        "license": "ISC",
-        "bugs": {
-          "url": "https://github.com/tezxjs/tezx-app-example"
-        },
-        "homepage": "https://github.com/tezxjs/tezx-app-example",
-        "dependencies": {
-          ${(ts ? `"typescript": "^5.8.2",` : "")}
-          "tezx": "^2.0.3"${env == 'node' ? `,\n          "tsx": "^4.19.2"` : ""}${useWS && env == 'node' ? `,\n          "ws": "^8.18.1"` : ""}${install.length ? `,\n          ${install?.join(",\n")}` : ""}
-        },
-        "devDependencies": {
-          "@types/node": "^22.13.14"
-        }
-      }`.trim();
+  let cmd = {
+    bun: {
+      start: "bun dist/index.js",
+      dev: "bun run --hot --watch src/index.ts",
+    },
+    deno: {
+      start: "deno run --allow-all dist/index.js",
+      dev: "deno run --watch --allow-all --unstable-sloppy-imports src/index.ts",
+    },
+    node: {
+      start: "node dist/index.js",
+      dev: "tsx watch src/index.ts",
+    }
+  };
+
+  let json = `
+{
+  "name": "${projectName || "tezx-app-example"}",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration. Fully compatible with Node.js, Deno, and Bun.",
+  "scripts": { ${ts ? `
+    "build:esm": "tsc --module ESNext --outDir dist --removeComments",
+    "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
+    "build": "${choiceStep?.build}",` : ""}
+    "start": "${cmd?.[env as keyof typeof cmd]?.start}",
+    "dev": "${cmd?.[env as keyof typeof cmd]?.dev}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tezxjs/tezx-app-example"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tezxjs/tezx-app-example"
+  },
+  "homepage": "https://github.com/tezxjs/tezx-app-example",
+  "dependencies": {
+    ${(ts ? `"typescript": "^5.8.2",` : "")}
+    "tezx": "^2.0.3"${env == 'node' ? `,\n    "tsx": "^4.19.2"` : ""}${useWS && env == 'node' ? `,\n    "ws": "^8.18.1"` : ""}${install.length ? `,\n    ${install?.join(",\n")}` : ""}
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14"
+  }
+}`.trim();
 
   writeFileSync(join(root, 'package.json'), json);
 }

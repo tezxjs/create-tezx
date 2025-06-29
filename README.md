@@ -52,7 +52,7 @@ npm create tezx@latest my-app --install
 Specify which package manager to use.
 
 ```bash
-npm create tezx@latest my-app -- --pm bun
+npm create tezx@latest my-app --pm bun
 ```
 
 ### `--ts`, `-ts`

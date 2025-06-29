@@ -3,11 +3,11 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path, { join, resolve } from "node:path";
 import readline from "node:readline";
 import { TemplateContent } from "./template/index.js";
-import { TemplateObjectType } from "./template/utils.js"
-import { ws } from "./ws.js";
+import { TemplateObjectType } from "./template/utils.js";
 import { arrowSelect } from "./utils/arrowSelect.js";
 import { colorText } from "./utils/colors.js";
 import { index, packageJson } from "./utils/fileContent.js";
+import { ws } from "./ws.js";
 
 export type Config = {
   directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env" | "useWS" | "useStatic" | "staticFolder", string>

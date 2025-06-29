@@ -37,7 +37,7 @@ export async function arrowSelect(promptText: string, options: string[]): Promis
                 process.stdin.off("keypress", onKeyPress);
                 if (process.stdin.isTTY) process.stdin.setRawMode(false);
                 rl.close();
-                process.exit(1);
+                process.exit(0);
             }
         };
         // const cleanup = () => {

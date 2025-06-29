@@ -10,7 +10,7 @@ import { colorText } from "./colors.js";
 import { index, packageJson } from "./fileContent.js";
 
 export type Config = {
-  directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env", string>
+  directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env" | "useWS" | "useStatic" | "staticFolder", string>
 };
 
 export let packageManager = ["npm", "bun", "yarn", "pnpm"];
@@ -49,7 +49,10 @@ export async function create(config: Config) {
 
   if (!directory) {
     directory = await ask(colorText("📦 Target directory: ", "magenta"));
-    if (!directory) return console.log(colorText("❌ Project name required.", 'red')), process.exit(1);
+    if (!directory) {
+      console.log(colorText("❌ Project name required.", "red"));
+      process.exit(0);
+    }
   }
 
   let projectName = path.basename(directory);
@@ -58,11 +61,10 @@ export async function create(config: Config) {
 
   let ts = false;
   let checkEnv = (options?.["env"] || options?.["runtime"]);
-  const env = (!runtime?.includes(checkEnv) ? "node" : checkEnv) || await arrowSelect("💻 Runtime?", runtime);
+  const env = runtime?.includes(checkEnv) ? checkEnv : await arrowSelect("💻 Runtime?", runtime);
 
-
-  let useWS = false;
-  let staticFolder = 'public';
+  let useWS = !!options?.['useWS'] || false;
+  let staticFolder = options?.['staticFolder'] || 'public';
   let useStatic = true;
   let template: TemplateObjectType = {
     content: "",
@@ -77,22 +79,24 @@ export async function create(config: Config) {
       if (!availableTemplate) {
         console.error(`❌ Unknown template: "${templateKey}"`);
         console.error(`ℹ️ Available templates: ${Object.keys(TemplateContent).join(", ")}`);
-        process.exit(1);
+        process.exit(0);
       }
       template = availableTemplate;
     }
   }
   else {
     ts = !!(options?.['ts'] || (await ask("🟦 Use TypeScript? (y/N): ") as any).toLowerCase() === "y");
-    useWS = (await ask("🌐 Enable WebSocket? (y/N): ") as any).toLowerCase() === "y";
-    useStatic = (await ask("📁 Use static folder? (y/N): ") as any).toLowerCase() === "y";
-    staticFolder = useStatic ? await ask("📂 Static folder name? (default: public): ") : "";
+    useWS = !!options?.['useWS'] || (await ask("🌐 Enable WebSocket? (y/N): ") as any).toLowerCase() === "y";
+    useStatic = !!options?.['useStatic'] || (await ask("📁 Use static folder? (y/N): ") as any).toLowerCase() === "y";
+    staticFolder = useStatic ? (options?.['staticFolder'] || await ask("📂 Static folder name? (default: public): ")) : "";
   }
 
 
   let checkPackageManager = (options?.["pm"] || options?.["p"]);
-  const choice = (!packageManager?.includes(checkPackageManager) ? "npm" : checkPackageManager) || await arrowSelect("📦 Choose your package manager", packageManager);
-  const install = (options?.['i'] || options?.['install']) || (await ask("📥 Install dependencies now? (y/N): ") as any).toLowerCase() === "y";
+  const choice = packageManager?.includes(checkPackageManager) ? checkPackageManager : await arrowSelect("📦 Choose your package manager", packageManager);
+  const install =
+    (options?.["i"] === "true" || options?.["install"] === "true") ||
+    ((await ask("📥 Install dependencies now? (y/N): ")).toLowerCase() === "y");
 
   console.log(`\n📁 Creating project: ${projectName}...\n`);
   let stop = startLoader("Creating Project");
@@ -177,4 +181,5 @@ export async function create(config: Config) {
   console.log(colorText(`   ${choiceStep?.dev}`, "white"));
   console.log("");
   stop();
+  process.exit(0);
 }

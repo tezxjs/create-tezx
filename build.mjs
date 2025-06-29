@@ -10,11 +10,11 @@ const commonOptions = {
     external: ['node:*'],       // 🔧 optional: skip bundling node: modules
 };
 
-build({
-    ...commonOptions,
-    format: 'cjs',
-    outfile: 'dist/index.cjs',
-});
+// build({
+//     ...commonOptions,
+//     format: 'cjs',
+//     outfile: 'dist/index.cjs',
+// });
 
 build({
     ...commonOptions,

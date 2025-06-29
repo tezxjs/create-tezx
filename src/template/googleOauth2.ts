@@ -62,5 +62,5 @@ app.get('/auth/callback', verifyGoogleToken({
         }
     ],
     import: [`import { GoogleOauthClient, getGoogleOAuthURL, verifyGoogleToken } from "@tezx/google-oauth2";`],
-    package: [packageManagerCommands('@tezx/google-oauth2', "^1.0.8")]
+    package: [packageManagerCommands('@tezx/google-oauth2', "^1.0.8"), packageManagerCommands("@googleapis/oauth2", "^2.0.1")]
 }

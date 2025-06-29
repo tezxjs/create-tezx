@@ -3,7 +3,13 @@ import { googleOauth2Template } from "./googleOauth2.js"
 import { TemplateObjectType } from "./utils.js"
 import { wsTemplate } from "./ws.js"
 
-export let TemplateContent: Record<'ws' | 'github-oauth2' | 'google-oauth2', TemplateObjectType> = {
+export let TemplateContent: Record<"minimal" | 'ws' | 'github-oauth2' | 'google-oauth2', TemplateObjectType> = {
+    "minimal": {
+        content: "",
+        files: [],
+        import: [],
+        package: [],
+    },
     'ws': wsTemplate,
     "github-oauth2": githubOauth2Template,
     "google-oauth2": googleOauth2Template,

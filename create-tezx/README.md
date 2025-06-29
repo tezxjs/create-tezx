@@ -71,6 +71,10 @@ Set the runtime environment: `node`, `bun`, or `deno`.
 npm create tezx@latest my-app --runtime bun
 ```
 
+### `--y`, `--yes`, `-y`, `-yes`
+
+Want to skip all prompts?
+
 ---
 
 ## 📁 Supported Templates

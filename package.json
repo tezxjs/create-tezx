@@ -10,7 +10,7 @@
     "build:esm": "tsc --module ESNext --outDir dist --removeComments",
     "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
     "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:dts",
-    "bun": "bun run --hot --watch src/index.ts myapp -i -env bun -p bun -t",
+    "bun": "bun run --hot --watch src/index.ts myapp -i -env bun -p -t",
     "node": "nodemon app.ts",
     "deno": "deno run --watch --allow-all --unstable-sloppy-imports  app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,5 +1,92 @@
 #!/usr/bin/env node
-import N from"node:readline";import{execSync as T}from"node:child_process";import{existsSync as z,mkdirSync as x,writeFileSync as g}from"node:fs";import{join as l,resolve as j}from"node:path";import E from"node:readline";var y=`
+import J from"node:readline";var E={reset:"\x1B[0m",bold:"\x1B[1m",underline:"\x1B[4m",gray:"\x1B[90m",white:"\x1B[97m",black:"\x1B[30m",red:"\x1B[31m",green:"\x1B[32m",yellow:"\x1B[33m",blue:"\x1B[34m",magenta:"\x1B[35m",cyan:"\x1B[36m",bgRed:"\x1B[41m",bgGreen:"\x1B[42m",bgYellow:"\x1B[43m",bgBlue:"\x1B[44m",bgMagenta:"\x1B[45m",bgCyan:"\x1B[46m",bgWhite:"\x1B[47m",orange:"\x1B[38;2;255;88;30m",bgOrange:"\x1B[48;2;255;88;30m"};function e(i,n){return`${E[n]}${i}${E.reset}`}import{execSync as F}from"node:child_process";import{mkdirSync as C,writeFileSync as R}from"node:fs";import T,{join as _,resolve as B}from"node:path";import X from"node:readline";var g=(i,n)=>({version:n,npm:["npm install",i],bun:["bun add",i],yarn:["yarn add",i],pnpm:["pnpm add",i]});var z={content:`
+// 1. Initialize OAuth2 client
+const client = GitHubOauthClient({
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    redirectUri: 'http://localhost:3000/github/callback'
+});
+
+// Step 1: Redirect user to GitHub login
+app.get('/github', getGithubOAuthURL({
+    authClient: client,
+}), (ctx) => {
+    return ctx.redirect(ctx.state.get('github_oauth_url'));
+});
+
+// Step 2: Verify GitHub token and handle user session
+app.get('/github/callback', verifyGithubToken({
+    authClient: client,
+    Callbacks: (ctx) => {
+        return {
+            session: async (session, user) => {
+                console.log('Session:', session);
+                console.log('User:', user);
+                return session;
+            }
+        };
+    }
+}), async (ctx) => {
+    return ctx.json({ success: true });
+});
+    `,files:[{content:`GITHUB_CLIENT_ID = 12323
+GITHUB_CLIENT_SECRET=234234
+`,path:".env"}],import:["import { GitHubOauthClient, getGithubOAuthURL,  verifyGithubToken } from '@tezx/github-oauth2'; "],package:[g("@tezx/github-oauth2","^1.0.2")]};var I={content:`
+// 1. Initialize OAuth2 client
+const client = GoogleOauthClient({
+  clientId: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  redirectUri: 'http://localhost:3000/auth/callback',
+});
+
+// 2. Route to start Google login
+app.get('/auth/google', getGoogleOAuthURL({
+  authClient: client,
+  scopes: ['openid','email','profile'],
+}), (ctx) => {
+  return ctx.redirect(ctx.state.get('google_oauth_url'));
+});
+
+// 3. Callback route, verify token and establish session
+app.get('/auth/callback', verifyGoogleToken({
+  authClient: client,
+  onError: (err) => {
+    console.error('OAuth Error:', err);
+    // handle error or redirect
+  },
+  onSuccess: (tokens) => {
+    console.log('Tokens:', tokens);
+  },
+  Callbacks: (ctx)=> {
+    return {
+    signIn: async (user) => {
+      // e.g. allow only users from a domain
+      return user.email.endsWith('@yourcompany.com');
+    },
+    jwt: async (token, user) => {
+      // attach roles or custom claims
+      token.role = user.email_verified ? 'member' : 'guest';
+      return token;
+    },
+    session: async (session, user) => {
+      // persist user profile in session
+      session.user = {
+        id: user.sub,
+        email: user.email,
+        name: user.name,
+        picture: user.picture
+      };
+      return session;
+    }
+  }
+  }
+}), async (ctx) => {
+  // Now ctx.session is populated
+  return ctx.json({ success: true });
+});
+    `,files:[{content:`GOOGLE_CLIENT_ID = 12323
+GOOGLE_CLIENT_SECRET=234234
+`,path:".env"}],import:['import { GoogleOauthClient, getGoogleOAuthURL, verifyGoogleToken } from "@tezx/google-oauth2";'],package:[g("@tezx/google-oauth2","^1.0.8"),g("@googleapis/oauth2","^2.0.1")]};var G={content:"",files:[],import:[]};var k={minimal:{content:"",files:[],import:[],package:[]},ws:G,"github-oauth2":z,"google-oauth2":I};var W=`
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -167,25 +254,29 @@ import N from"node:readline";import{execSync as T}from"node:child_process";impor
         </script>
     </body>
 </html>
-`;import h from"node:readline";async function b(s,e){return new Promise(n=>{let t=0,i=h.createInterface({input:process.stdin,output:process.stdout});h.emitKeypressEvents(process.stdin,i),process.stdin.isTTY&&process.stdin.setRawMode(!0);let a=()=>{process.stdout.write("\x1B[2J\x1B[0f"),console.log(s+` (Use \u2191 \u2193 arrows, Enter to confirm)
-`),e.forEach((p,r)=>{console.log(`${r===t?"\u{1F449}":"  "} ${r===t?"\x1B[36m":"\x1B[0m"}${p}\x1B[0m`)})},c=(p,r)=>{if(r.name==="up")t=(t-1+e.length)%e.length,a();else if(r.name==="down")t=(t+1)%e.length,a();else{if(r.name==="return")return n(e[t]);r.name==="c"&&r.ctrl&&(process.stdin.off("keypress",c),process.stdin.isTTY&&process.stdin.setRawMode(!1),i.close(),process.exit(1))}};a(),process.stdin.on("keypress",c)})}var v={reset:"\x1B[0m",bold:"\x1B[1m",underline:"\x1B[4m",gray:"\x1B[90m",white:"\x1B[97m",black:"\x1B[30m",red:"\x1B[31m",green:"\x1B[32m",yellow:"\x1B[33m",blue:"\x1B[34m",magenta:"\x1B[35m",cyan:"\x1B[36m",bgRed:"\x1B[41m",bgGreen:"\x1B[42m",bgYellow:"\x1B[43m",bgBlue:"\x1B[44m",bgMagenta:"\x1B[45m",bgCyan:"\x1B[46m",bgWhite:"\x1B[47m",orange:"\x1B[38;2;255;88;30m",bgOrange:"\x1B[48;2;255;88;30m"};function o(s,e){return`${v[e]}${s}${v.reset}`}function M(s){let e=0,n=["\u280B","\u2819","\u2839","\u2838","\u283C","\u2834","\u2826","\u2827","\u2807","\u280F"],t=setInterval(()=>{process.stdout.write(`\r${n[e=++e%n.length]} ${s}`)},80);return()=>{clearInterval(t),process.stdout.write(`\r\u2705 Done!                             
-`)}}var S=E.createInterface({input:process.stdin,output:process.stdout}),d=(s,e="")=>new Promise(n=>{S.question(e?`${s} (${e}): `:s,t=>{n(t.trim()||e)})});async function k(){console.log(o(`
-\u26A1 TezX App Creator (no dependencies CLI)
-`,"orange"));let s=await d(o("\u{1F4E6} Project name: ","magenta"));if(!s)return console.log(o("\u274C Project name required.","red")),process.exit(1);let e=j(process.cwd(),s);if(z(e))return console.log("\u274C Folder already exists."),process.exit(1);let n=(await d("\u{1F7E6} Use TypeScript? (y/N): ")).toLowerCase()==="y";let t=await b("\u{1F4BB} Runtime?",["node","bun","deno"]);let i=(await d("\u{1F310} Enable WebSocket? (y/N): ")).toLowerCase()==="y";let a=(await d("\u{1F4C1} Use static folder? (y/N): ")).toLowerCase()==="y",c=a?await d("\u{1F4C2} Static folder name? (default: public): "):"",p=await b("\u{1F4E6} Choose your package manager",["npm","bun","yarn","pnpm"]),r=(await d("\u{1F4E5} Install dependencies now? (y/N): ")).toLowerCase()==="y";console.log(`
-\u{1F4C1} Creating project: ${s}...
-`);let f=M("Creating Project");if(x(e,{recursive:!0}),i&&g(l(e,"ws.html"),y),a){let u=l(e,c||"public");x(u,{recursive:!0})}x(l(e,"src"),{recursive:!0});let w=l(e,n?"src/index.ts":"src/index.js"),$=`
+`;import L from"node:readline";async function $(i,n){return new Promise(o=>{let s=0,t=L.createInterface({input:process.stdin,output:process.stdout});L.emitKeypressEvents(process.stdin,t),process.stdin.isTTY&&process.stdin.setRawMode(!0);let a=()=>{process.stdout.write("\x1B[2J\x1B[0f"),console.log(i+` (Use \u2191 \u2193 arrows, Enter to confirm)
+`),n.forEach((l,r)=>{console.log(`${r===s?"\u{1F449}":"  "} ${r===s?"\x1B[36m":"\x1B[0m"}${l}\x1B[0m`)})},c=(l,r)=>{if(r.name==="up")s=(s-1+n.length)%n.length,a();else if(r.name==="down")s=(s+1)%n.length,a();else{if(r.name==="return")return o(n[s]);r.name==="c"&&r.ctrl&&(process.stdin.off("keypress",c),process.stdin.isTTY&&process.stdin.setRawMode(!1),t.close(),process.exit(0))}};a(),process.stdin.on("keypress",c)})}import{mkdirSync as U,writeFileSync as S}from"node:fs";import{join as v}from"node:path";var N=({ts:i,template:n,root:o,env:s,useWS:t=!1,useStatic:a=!1,staticFolder:c})=>{let l=v(o,i?"src/index.ts":"src/index.js");U(v(o,"src"),{recursive:!0});let r=`
 import { TezX } from "tezx";
-import { ${t}Adapter ,loadEnv} from "tezx/${t}";
-${i?`import { upgradeWebSocket } from "tezx/ws";
+import { ${s}Adapter ,loadEnv} from "tezx/${s}";
+import { logger } from "tezx/middleware";
+${n?.import?.join(`
+`)}
+${t?`import { upgradeWebSocket } from "tezx/ws";
 `:""}
 const app = new TezX({
-    env: loadEnv()
+    env: loadEnv(),
+    debugMode: true,
     // Additional options
 });
-app.get("/", (ctx) => ctx.text("Hello from TezX (${t})"));
+app.use([logger()]);
+
+app.get("/", (ctx) => ctx.text("Hello from TezX (${s})"));
 
 ${a?`app.static("${c||"public"}");`:""}
-${i?`
+${n?.content?`
+${n?.content?.trim()}
+`:""}
+${t?`
 const socket: WebSocket[] = [];
 app.get(
   "/ws",
@@ -223,10 +314,10 @@ app.get(
 );
 `:""}
 
-${t}Adapter(app).listen(3000, () => {
+${s}Adapter(app).listen(3000, () => {
   console.log("\u{1F680} TezX running on http://localhost:3000");
 });
-`;if(g(w,$.trim()),n){let u=`
+`;if(i){let p=`
 {
   "compilerOptions": {
     "outDir": "./dist",
@@ -248,40 +339,86 @@ ${t}Adapter(app).listen(3000, () => {
     "tests"
   ]
 }
-  `.trim();g(l(e,"tsconfig.json"),u)}let C=`{
-    "name": "${s}",
-    "version": "1.0.0",
-    "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration. Fully compatible with Node.js, Deno, and Bun.",
-    "scripts": {
-      "build:cjs": "tsc --module CommonJS --outDir dist/cjs --removeComments",
-      "build:esm": "tsc --module ESNext --outDir dist --removeComments",
-      "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
-      "build": "npm run build:cjs && npm run build:esm && npm run build:dts",
-      "start": "node dist/index.js",
-      ${t=="node"?'"dev": "tsx watch src/index.ts" ':t=="bun"?'"dev": "bun run --hot --watch src/index.ts"':'"dev": "deno run --watch --allow-all --unstable-sloppy-imports src/index.ts" '}
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/tezxjs/tezx-app-example"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-      "url": "https://github.com/tezxjs/tezx-app-example"
-    },
-    "homepage": "https://github.com/tezxjs/tezx-app-example",
-    "dependencies": {
-      ${n?'"typescript": "^5.8.2",':""}
-      "tezx": "^2.0.3",
-      "tsx": "^4.19.2"${i&&t=="node"?`,
-"ws": "^8.18.1"`:""}
-    },
-    "devDependencies": {
-      "@types/node": "^22.13.14"
-    }
-  }`.trim();g(l(e,"package.json"),C),S.close();let m={bun:{cd:"cd "+s,install:"bun install",dev:"bun dev"},npm:{cd:"cd "+s,install:"npm install",dev:"npm run dev"},yarn:{cd:"cd "+s,install:"yarn",dev:"yarn dev"},pnpm:{cd:"cd "+s,install:"pnpm install",dev:"pnpm run dev"}}[p];r&&T(m?.install,{cwd:e,stdio:"inherit"}),console.log(o(`
+  `.trim();S(v(o,"tsconfig.json"),p)}S(l,r.trim())},M=({template:i,root:n,directory:o,env:s,ts:t,useWS:a})=>{let c=[];Array.isArray(i?.package)&&i?.package?.forEach(r=>{let{version:p,npm:m}=r||{};c.push(`"${m?.[1]}": "${p}"`)});let l=`{
+        "name": "${o}",
+        "version": "1.0.0",
+        "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration. Fully compatible with Node.js, Deno, and Bun.",
+        "scripts": {
+          "build:cjs": "tsc --module CommonJS --outDir dist/cjs --removeComments",
+          "build:esm": "tsc --module ESNext --outDir dist --removeComments",
+          "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
+          "build": "npm run build:cjs && npm run build:esm && npm run build:dts",
+          "start": "node dist/index.js",
+          ${s=="node"?'"dev": "tsx watch src/index.ts" ':s=="bun"?'"dev": "bun run --hot --watch src/index.ts"':'"dev": "deno run --watch --allow-all --unstable-sloppy-imports src/index.ts" '}
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/tezxjs/tezx-app-example"
+        },
+        "keywords": [],
+        "author": "",
+        "license": "ISC",
+        "bugs": {
+          "url": "https://github.com/tezxjs/tezx-app-example"
+        },
+        "homepage": "https://github.com/tezxjs/tezx-app-example",
+        "dependencies": {
+          ${t?'"typescript": "^5.8.2",':""}
+          "tezx": "^2.0.3"${s=="node"?`,
+          "tsx": "^4.19.2"`:""}${a&&s=="node"?`,
+          "ws": "^8.18.1"`:""}${c.length?`,
+          ${c?.join(`,
+`)}`:""}
+        },
+        "devDependencies": {
+          "@types/node": "^22.13.14"
+        }
+      }`.trim();S(v(n,"package.json"),l)};var b=["npm","bun","yarn","pnpm"],f=["node","bun","deno"];function H(i){let n=0,o=["\u280B","\u2819","\u2839","\u2838","\u283C","\u2834","\u2826","\u2827","\u2807","\u280F"],s=setInterval(()=>{process.stdout.write(`\r${o[n=++n%o.length]} ${i}`)},80);return()=>{clearInterval(s),process.stdout.write(`\r\u2705 Done!                             
+`)}}var A=X.createInterface({input:process.stdin,output:process.stdout}),u=(i,n="")=>new Promise(o=>{A.question(n?`${i} (${n}): `:i,s=>{o(s.trim()||n)})});async function D(i){let n=i?.directory,o=i?.options;console.log(e(`
+\u26A1 TezX App Creator (no dependencies CLI)
+`,"orange")),n||(n=await u(e("\u{1F4E6} Target directory: ","magenta")),n||(console.log(e("\u274C Project name required.","red")),process.exit(0)));let s=T.basename(n),t=B(process.cwd(),n),a=!1,c=o?.env||o?.runtime,l=f?.includes(c)?c:await $("\u{1F4BB} Runtime?",f),r=!!o?.useWS||!1,p=o?.staticFolder||"public",m=!0,y={content:"",import:[],files:[]};if(o?.t||o?.template){let d=o.t||o.template;if(r=d?.toLowerCase()=="ws",!r){let w=k?.[d];w||(console.error(`\u274C Unknown template: "${d}"`),console.error(`\u2139\uFE0F Available templates: ${Object.keys(k).join(", ")}`),process.exit(0)),y=w}}else a=!!(o?.ts||(await u("\u{1F7E6} Use TypeScript? (y/N): ")).toLowerCase()==="y"),r=!!o?.useWS||(await u("\u{1F310} Enable WebSocket? (y/N): ")).toLowerCase()==="y",m=!!o?.useStatic||(await u("\u{1F4C1} Use static folder? (y/N): ")).toLowerCase()==="y",p=m?o?.staticFolder||await u("\u{1F4C2} Static folder name? (default: public): "):"";let O=o?.pm||o?.p,j=b?.includes(O)?O:await $("\u{1F4E6} Choose your package manager",b),x=o?.i==="true"||o?.install==="true"||(await u("\u{1F4E5} Install dependencies now? (y/N): ")).toLowerCase()==="y";console.log(`
+\u{1F4C1} Creating project: ${s}...
+`);let P=H("Creating Project");if(C(t,{recursive:!0}),r&&R(_(t,"ws.html"),W),m){let d=_(t,p||"public");C(d,{recursive:!0})}N({template:y,root:t,ts:!!a,env:l,staticFolder:p,useWS:r,useStatic:m}),M({directory:n,env:l,root:t,ts:!!a,useWS:r,template:y}),A.close();let h={bun:{cd:"cd "+n,install:"bun install",dev:"bun dev"},npm:{cd:"cd "+n,install:"npm install",dev:"npm run dev"},yarn:{cd:"cd "+n,install:"yarn",dev:"yarn dev"},pnpm:{cd:"cd "+n,install:"pnpm install",dev:"pnpm run dev"}}[j];y?.files?.forEach(d=>{let w=T.join(t,T.dirname(d?.path));C(w,{recursive:!0}),R(T.join(t,d?.path),d?.content)}),x&&F(h?.install,{cwd:t,stdio:"inherit"}),console.log(e(`
 \u2705 TezX project "${s}" is ready!
-`,"green")),console.log(o("\u{1F9F0} Summary of your configuration:","cyan")),console.log(`\u{1F4C1} Project Name: ${o(s,"yellow")}`),console.log(`\u{1F7E6} TypeScript: ${o(n?"Yes":"No",n?"green":"gray")}`),console.log(`\u{1F4BB} Runtime: ${o(t,"blue")}`),console.log(`\u{1F310} WebSocket: ${o(i?"Enabled":"Disabled",i?"green":"gray")}`),console.log(`\u{1F4C1} Static Folder: ${o(a?c||"public":"Not Used",a?"green":"gray")}`),console.log(`\u{1F4E6} Package Manager: ${o(p,"magenta")}`),console.log(`\u{1F4E5} Dependencies Installed: ${o(r?"Yes":"No",r?"green":"red")}
-`),console.log(o("\u{1F449} Next Steps:","cyan")),console.log(o(`   ${m?.cd}`,"white")),r||console.log(o(`   ${m?.install}`,"white")),console.log(o(`   ${m?.dev}`,"white")),console.log(""),f()}var P=N.createInterface({input:process.stdin,output:process.stdout});(async()=>{let s=process.argv[2],e=(t,i)=>{i.name==="c"&&i.ctrl&&(process.stdin.off("keypress",e),process.stdin.isTTY&&process.stdin.setRawMode(!1),P.close(),process.exit(1))};switch(process.stdin.on("keypress",e),process.argv[2]){case"--t":case"--template":console.log("template use here");break;default:k();break}})();
-//!done
+`,"green")),console.log(e("\u{1F9F0} Summary of your configuration:","cyan")),console.log(`\u{1F4C1} Project Name: ${e(s,"yellow")}`),console.log(`\u{1F7E6} TypeScript: ${e(a?"Yes":"No",a?"green":"gray")}`),console.log(`\u{1F4BB} Runtime: ${e(l,"blue")}`),console.log(`\u{1F310} WebSocket: ${e(r?"Enabled":"Disabled",r?"green":"gray")}`),console.log(`\u{1F4C1} Static Folder: ${e(m?p||"public":"Not Used",m?"green":"gray")}`),console.log(`\u{1F4E6} Package Manager: ${e(j,"magenta")}`),console.log(`\u{1F4E5} Dependencies Installed: ${e(x?"Yes":"No",x?"green":"red")}
+`),console.log(e("\u{1F449} Next Steps:","cyan")),console.log(e(`   ${h?.cd}`,"white")),x||console.log(e(`   ${h?.install}`,"white")),console.log(e(`   ${h?.dev}`,"white")),console.log(""),P(),process.exit(0)}var Y=J.createInterface({input:process.stdin,output:process.stdout});(async()=>{let i=(a,c)=>{c.name==="c"&&c.ctrl&&(process.stdin.off("keypress",i),process.stdin.isTTY&&process.stdin.setRawMode(!1),Y.close(),process.exit(0))};process.stdin.on("keypress",i);let n=process.argv.slice(2),o={},s;for(let a=0;a<n.length;a++){let c=n[a];if(c.startsWith("--")){let l=c.slice(2),r=n[a+1];r&&!r.startsWith("-")?(o[l]=r,a++):o[l]="true"}else if(c.startsWith("-")){let l=c.slice(1),r=n[a+1];r&&!r.startsWith("-")?(o[l]=r,a++):o[l]="true"}else s||(s=c)}let t={directory:s,options:o};if((o.y==="true"||o.yes==="true")&&(t.options.ts="true",t.options.useWS="true",t.options.useStatic="true",t.options.staticFolder="public",t.options.pm=b?.includes(t.options?.p||t?.options?.pm)?t.options?.p||t?.options?.pm:"npm",t.options.p=b?.includes(t.options?.p||t?.options?.pm)?t.options?.p||t?.options?.pm:"npm",t.options.env=f?.includes(t.options?.env||t?.options?.runtime)?t.options?.env||t?.options?.runtime:"node",t.options.runtime=f?.includes(t.options?.env||t?.options?.runtime)?t.options?.env||t?.options?.runtime:"node",t.options.install="true"),(o.help||o.h)&&(console.log(`
+${e("\u256D\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256E","gray")}
+${e("\u2502","gray")}     ${e("\u26A1 Create TezX","yellow")} - Scaffold your next backend app     ${e("\u2502","gray")}
+${e("\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256F","gray")}
+
+${e("\u{1F4E6} Usage:","cyan")} 
+  ${e("create-tezx","green")} ${e("[directory] [...options]","gray")}
+
+${e("\u{1F680} Quick Start:","cyan")}
+  ${e("npm","magenta")} create tezx@latest
+  ${e("yarn","magenta")} create tezx
+  ${e("pnpm","magenta")} create tezx@latest
+  ${e("bun","magenta")} create tezx@latest
+  ${e("deno","magenta")} run -A npm:create-tezx@latest
+
+${e("\u{1F39B}\uFE0F  Options:","cyan")}
+
+  ${e("-t, --template <name>","green")}    Use a specific starter template
+  ${e("--ts, -ts","green")}                Enable TypeScript setup
+  ${e("--env, --runtime <env>","green")}   Set runtime: node | bun | deno
+  ${e("-p, --pm <manager>","green")}       Package manager: npm | bun | yarn | pnpm
+  ${e("-i, --install","green")}            Automatically install dependencies
+  ${e("-y, --yes","green")}                Skip prompts using default options
+  ${e("-v, --version","green")}            Show CLI version
+  ${e("-h, --help","green")}               Display this help message
+
+${e("\u{1F9F0} Examples:","cyan")}
+  ${e("npm create tezx@latest my-app --template ws --ts --env node","gray")}
+  ${e("bun create tezx@latest -- --install --pm bun","gray")}
+
+${e("\u{1F4C1} Available Templates:","cyan")}
+  ${e("minimal","yellow")}         Minimal TypeScript setup
+  ${e("ws","yellow")}              Built-in WebSocket server
+  ${e("google-oauth2","yellow")}   Google OAuth2 Authentication
+  ${e("github-oauth2","yellow")}   GitHub OAuth2 Authentication
+
+${e("\u{1F517} Repository:","cyan")}
+  ${e("https://github.com/tezxjs/tezx","underline")}
+
+${e("\u{1F9D1}\u200D\u{1F4BB} Author:","cyan")}
+  Rakibul Islam ${e("<https://github.com/srakib17>","blue")}`),process.exit(0)),o.v||o.version){console.log("TezX CLI v1.0.4"),process.exit(0);return}D(t)})();

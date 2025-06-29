@@ -1,23 +1,11 @@
-import { TezX } from "tezx";
-import { bunAdapter ,loadEnv} from "tezx/bun";
-import { logger } from "tezx/middleware";
-import { GoogleOauthClient, getGoogleOAuthURL, verifyGoogleToken } from "@tezx/google-oauth2";
+import { packageManagerCommands, TemplateObjectType } from "./utils.js";
 
-const app = new TezX({
-    env: loadEnv(),
-    debugMode: true,
-    // Additional options
-});
-app.use([logger()]);
-
-app.get("/", (ctx) => ctx.text("Hello from TezX (bun)"));
-
-app.static("public");
-
+export const googleOauth2Template: TemplateObjectType = {
+    content: `
 // 1. Initialize OAuth2 client
 const client = GoogleOauthClient({
-  clientId: process.env.GOOGLE_CLIENT_ID!,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+  clientId: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   redirectUri: 'http://localhost:3000/auth/callback',
 });
 
@@ -66,9 +54,13 @@ app.get('/auth/callback', verifyGoogleToken({
   // Now ctx.session is populated
   return ctx.json({ success: true });
 });
-
-
-
-bunAdapter(app).listen(3000, () => {
-  console.log("🚀 TezX running on http://localhost:3000");
-});
+    `,
+    files: [
+        {
+            content: `GOOGLE_CLIENT_ID = 12323\nGOOGLE_CLIENT_SECRET=234234\n`,
+            path: ".env"
+        }
+    ],
+    import: [`import { GoogleOauthClient, getGoogleOAuthURL, verifyGoogleToken } from "@tezx/google-oauth2";`],
+    package: [packageManagerCommands('@tezx/google-oauth2', "^1.0.8")]
+}

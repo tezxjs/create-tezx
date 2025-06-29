@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { TemplateObjectType } from "../template/index.js";
+import { TemplateObjectType } from "../template/utils.js";
 
 export let index = ({
   ts,
@@ -23,15 +23,20 @@ export let index = ({
   let code = `
 import { TezX } from "tezx";
 import { ${env}Adapter ,loadEnv} from "tezx/${env}";
+import { logger } from "tezx/middleware";
+${template?.import?.join("\n")}
 ${useWS ? `import { upgradeWebSocket } from "tezx/ws";\n` : ""}
 const app = new TezX({
-    env: loadEnv()
+    env: loadEnv(),
+    debugMode: true,
     // Additional options
 });
+app.use([logger()]);
+
 app.get("/", (ctx) => ctx.text("Hello from TezX (${env})"));
 
 ${useStatic ? `app.static("${staticFolder || "public"}");` : ""}
-${template?.content ? `\n${template?.content}\n` : ""}
+${template?.content ? `\n${template?.content?.trim()}\n` : ""}
 ${useWS ? `
 const socket: WebSocket[] = [];
 app.get(
@@ -106,7 +111,14 @@ ${env}Adapter(app).listen(3000, () => {
   writeFileSync(mainFile, code.trim());
 }
 
-export let packageJson = ({ root, directory, env, ts, useWS, }: { root: string, directory: string, env: string, ts?: boolean, useWS?: boolean }) => {
+export let packageJson = ({ template, root, directory, env, ts, useWS, }: { template: TemplateObjectType, root: string, directory: string, env: string, ts?: boolean, useWS?: boolean }) => {
+  let install: string[] = [];
+  if (Array.isArray(template?.package)) {
+    template?.package?.forEach((p) => {
+      let { version, npm } = p as any || {};
+      install.push(`"${npm?.[1]}": "${version}"`)
+    })
+  }
   let json = `{
         "name": "${directory}",
         "version": "1.0.0",
@@ -138,8 +150,7 @@ export let packageJson = ({ root, directory, env, ts, useWS, }: { root: string, 
         "homepage": "https://github.com/tezxjs/tezx-app-example",
         "dependencies": {
           ${(ts ? `"typescript": "^5.8.2",` : "")}
-          "tezx": "^2.0.3",
-          "tsx": "^4.19.2"${useWS && env == 'node' ? `,\n"ws": "^8.18.1"` : ""}
+          "tezx": "^2.0.3"${env == 'node' ? `,\n          "tsx": "^4.19.2"` : ""}${useWS && env == 'node' ? `,\n          "ws": "^8.18.1"` : ""}${install.length ? `,\n          ${install?.join(",\n")}` : ""}
         },
         "devDependencies": {
           "@types/node": "^22.13.14"

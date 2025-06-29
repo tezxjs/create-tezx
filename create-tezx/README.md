@@ -79,6 +79,8 @@ npm create tezx@latest my-app --runtime bun
 
 * `minimal` – Minimal TypeScript setup
 * `websocket` – TezX with built-in WebSocket support `--template ws`
+* `Google Oauth2` – Google oauth2 `--t google-oauth2`
+* `Github Oauth2` – Github oauth2 `--t github-oauth2`
 
 ---
 

@@ -2,7 +2,8 @@ import { execSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path, { join, resolve } from "node:path";
 import readline from "node:readline";
-import { TemplateContent, TemplateObjectType } from "../template/index.js";
+import { TemplateContent } from "../template/index.js";
+import { TemplateObjectType } from "../template/utils.js"
 import { ws } from "../ws.js";
 import { arrowSelect } from "./arrowSelect.js";
 import { colorText } from "./colors.js";
@@ -55,7 +56,7 @@ export async function create(config: Config) {
   const root = resolve(process.cwd(), directory);
   // if (existsSync(root)) return console.log("❌ Folder already exists."), process.exit(1);
 
-  let ts = options?.['ts'] || (await ask("🟦 Use TypeScript? (y/N): ") as any).toLowerCase() === "y";
+  let ts = false;
   let checkEnv = (options?.["env"] || options?.["runtime"]);
   const env = (!runtime?.includes(checkEnv) ? "node" : checkEnv) || await arrowSelect("💻 Runtime?", runtime);
 
@@ -65,7 +66,8 @@ export async function create(config: Config) {
   let useStatic = true;
   let template: TemplateObjectType = {
     content: "",
-    file: []
+    import: [],
+    files: []
   };
   if (options?.["t"] || options?.["template"]) {
     const templateKey = options["t"] || options["template"];
@@ -81,6 +83,7 @@ export async function create(config: Config) {
     }
   }
   else {
+    ts = !!(options?.['ts'] || (await ask("🟦 Use TypeScript? (y/N): ") as any).toLowerCase() === "y");
     useWS = (await ask("🌐 Enable WebSocket? (y/N): ") as any).toLowerCase() === "y";
     useStatic = (await ask("📁 Use static folder? (y/N): ") as any).toLowerCase() === "y";
     staticFolder = useStatic ? await ask("📂 Static folder name? (default: public): ") : "";
@@ -120,7 +123,7 @@ export async function create(config: Config) {
     useStatic: useStatic
   })
 
-  packageJson({ directory: directory, env: env, root: root, ts: !!ts, useWS: useWS })
+  packageJson({ directory: directory, env: env, root: root, ts: !!ts, useWS: useWS, template })
 
   rl.close();
   const step = {
@@ -146,6 +149,12 @@ export async function create(config: Config) {
     }
   };
   let choiceStep = step[choice as keyof typeof step];
+
+  template?.files?.forEach((r) => {
+    let folder = path.join(root, path.dirname(r?.path));
+    mkdirSync(folder, { recursive: true });
+    writeFileSync(path.join(root, r?.path), r?.content);
+  })
 
   if (install) execSync(choiceStep?.install, { cwd: root, stdio: "inherit" });
 

@@ -16,8 +16,8 @@ app.static("public");
 
 // 1. Initialize OAuth2 client
 const client = GoogleOauthClient({
-  clientId: process.env.GOOGLE_CLIENT_ID!,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+  clientId: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   redirectUri: 'http://localhost:3000/auth/callback',
 });
 

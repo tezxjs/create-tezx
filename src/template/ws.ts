@@ -1,7 +1,7 @@
-import { TemplateObjectType } from "./index.js";
+import { TemplateObjectType } from "./utils.js";
 
 export const wsTemplate: TemplateObjectType = {
     content: '',
-    file: [],
-    package: []
+    files: [],
+    import: [],
 }

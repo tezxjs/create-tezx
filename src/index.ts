@@ -10,19 +10,16 @@ import { showVersion } from "./showVersion.js";
 // });
 
 (async () => {
+    // process.on('SIGINT', () => {
+    //     console.log('\n❌ Operation cancelled');
+    //     process.exit();
+    // });
 
-    let typing = "";
     const onKeyPress = (_: string, key: any) => {
         if (key.name === "c" && key.ctrl) {
             process.stdin.off("keypress", onKeyPress);
             if (process.stdin.isTTY) process.stdin.setRawMode(false);
             process.exit(0);
-        }
-        typing += key?.sequence;
-        if (key.name === "return") {
-            let t = typing;
-            typing = "";
-            return t;
         }
     };
 

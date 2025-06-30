@@ -8,7 +8,6 @@ import { showVersion } from "./showVersion.js";
 //     input: process.stdin,
 //     output: process.stdout,
 // });
-
 (async () => {
     // process.on('SIGINT', () => {
     //     console.log('\n❌ Operation cancelled');

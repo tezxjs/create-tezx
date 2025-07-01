@@ -6,7 +6,7 @@ import { TemplateContent } from "./template/index.js";
 import { TemplateObjectType } from "./template/utils.js";
 import { arrowSelect } from "./utils/arrowSelect.js";
 import { colorText } from "./utils/colors.js";
-import { index, packageJson } from "./utils/fileContent.js";
+import { gitignore, index, packageJson } from "./utils/fileContent.js";
 
 export type Config = {
   directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env" | "useStatic" | "staticFolder", string>
@@ -116,25 +116,25 @@ export async function create(config: Config) {
       cd: "cd " + directory,
       install: "bun install",
       dev: "bun dev",
-      build: "bun build:cjs && bun build:esm && bun build:dts",
+      build: "bun build:esm && bun build:dts",
     },
     npm: {
       cd: "cd " + directory,
       install: "npm install",
       dev: "npm run dev",
-      build: "npm run build:cjs && npm run build:esm && npm run build:dts",
+      build: "npm run build:esm && npm run build:dts",
     },
     yarn: {
       cd: "cd " + directory,
       install: "yarn",
       dev: "yarn dev",
-      build: "yarn build:cjs && yarn build:esm && yarn build:dts",
+      build: "yarn build:esm && yarn build:dts",
     },
     pnpm: {
       cd: "cd " + directory,
       install: "pnpm install",
       dev: "pnpm run dev",
-      build: "pnpm run build:cjs && pnpm run build:esm && pnpm run build:dts",
+      build: "pnpm run build:esm && pnpm run build:dts",
     }
   };
 
@@ -150,7 +150,7 @@ export async function create(config: Config) {
   })
 
   packageJson({ projectName: projectName, env: env, root: root, ts: !!ts, template, choiceStep: choiceStep })
-
+  gitignore({ root })
   rl.close();
 
 

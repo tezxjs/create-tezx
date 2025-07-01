@@ -1,5 +1,5 @@
 import { TezX } from "tezx";
-import { nodeAdapter ,loadEnv} from "tezx/node";
+import { bunAdapter ,loadEnv} from "tezx/bun";
 import { logger } from "tezx/middleware";
 import { upgradeWebSocket } from "tezx/ws";
 const app = new TezX({
@@ -9,7 +9,7 @@ const app = new TezX({
 });
 app.use([logger()]);
 
-app.get("/", (ctx) => ctx.text("Hello from TezX (node)"));
+app.get("/", (ctx) => ctx.text("Hello from TezX (bun)"));
 
 app.static("public");
 
@@ -49,6 +49,6 @@ app.get(
   },
 );
 
-nodeAdapter(app).listen(3000, () => {
+bunAdapter(app).listen(3000, () => {
   console.log("🚀 TezX running on http://localhost:3000");
 });

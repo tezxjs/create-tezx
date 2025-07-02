@@ -7,6 +7,7 @@ import { TemplateObjectType } from "./template/utils.js";
 import { arrowSelect } from "./utils/arrowSelect.js";
 import { colorText } from "./utils/colors.js";
 import { gitignore, index, packageJson, README } from "./utils/fileContent.js";
+import { version } from "./version.js";
 
 export type Config = {
   directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env" | "useStatic" | "staticFolder", string>
@@ -47,7 +48,7 @@ export async function create(config: Config) {
   // console.log(colorText(logo, 'orange'))
   let directory = config?.directory;
   let options = config?.options;
-  console.log(colorText("\n⚡ TezX App Creator (no dependencies CLI)\n", 'orange'));
+  console.log(colorText(`\n⚡ TezX App Creator(v${version})`, 'orange'));
 
   if (!directory) {
     directory = await ask(colorText("📦 Project name: ", "magenta"));

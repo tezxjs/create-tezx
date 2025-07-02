@@ -337,7 +337,6 @@ Thumbs.db
 
 
 export const README = ({ root, readme }: { readme?: string, root: string }) => {
-  const file = typeof readme == 'string' ? readme?.trim() : defaultReadme.trim();
-
+  const file = (typeof readme == 'string' && readme) ? readme?.trim() : defaultReadme.trim();
   writeFileSync(join(root, "README.md"), file, { encoding: "utf8" });
 };

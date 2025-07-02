@@ -18,7 +18,7 @@ This starter is designed to help you spin up production-ready APIs or SSR apps i
 
 ## 📦 Tech Stack
 
-- **Framework:** [TezX](https://github.com/tezxjs/TezX)
+- **Framework:** [TezX](https://github.com/tezxjs/tezx)
 - **Language:** TypeScript / JavaScript
 - **Template Engine (optional):** `ejs`, `pug`, `hbs`, `mustache`, or `nunjucks`
 - **Runtime Support:** Node.js, Bun, Deno (via compatibility)

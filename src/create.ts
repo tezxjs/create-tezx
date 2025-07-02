@@ -70,6 +70,7 @@ export async function create(config: Config) {
   let template: TemplateObjectType = {
     content: "",
     import: [],
+    readme: "",
     files: []
   };
 

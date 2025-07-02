@@ -6,6 +6,7 @@ import { wsTemplate } from "./ws.js"
 
 export let TemplateContent: Record<"minimal" | 'ws' | 'view-engine' | 'github-oauth2' | 'google-oauth2', TemplateObjectType> = {
     "minimal": {
+        readme: "",
         content: "",
         files: [],
         import: [],

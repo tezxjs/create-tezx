@@ -247,7 +247,7 @@ export let packageJson = ({ template, root, projectName, env, ts, useWS, choiceS
   "homepage": "https://github.com/tezxjs/tezx-app-example",
   "dependencies": {
     ${(ts ? `"typescript": "^5.8.2",` : "")}
-    "tezx": "^${version}"${env == 'node' ? `,\n    "tsx": "^4.19.2"` : ""}${useWS && env == 'node' ? `,\n    "ws": "^8.18.1"` : ""}${install.length ? `,\n    ${install?.join(",\n")}` : ""}
+    "tezx": "^${version}"${env == 'node' ? `,\n    "tsx": "^4.19.2"` : ""}${useWS && env == 'node' ? `,\n    "ws": "^8.18.1"` : ""}${install.length ? `,\n    ${install?.join(",\n    ")}` : ""}
   },
   "devDependencies": {
     "@types/node": "^22.13.14"

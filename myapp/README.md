@@ -1,116 +1,54 @@
-# 🚀 TezX Starter Template
+# TezX View Engine Example
 
-Welcome to the **TezX Starter Template** — a blazing-fast, full-featured backend template built on [TezX](https://github.com/tezxjs/tezx), the lightweight web framework inspired by the best of Express, Hono, and Bun.
-
-This starter is designed to help you spin up production-ready APIs or SSR apps in seconds.
+This example demonstrates how to use the `@tezx/view-engine` package to render server-side views using template engines such as **EJS**, **Pug**, **Handlebars**, **Mustache**, or **Nunjucks**.
 
 ---
 
-## ✨ Features
+## 🚀 How it works
 
-- ⚡️ Ultra-fast routing & middleware
-- 🔒 Built-in WebSocket & OAuth2-ready
-- 🔧 Plug-and-play `ViewEngine` for SSR
-- 🌱 Environment-based config support
-- 🧪 Minimal, testable, and extendable codebase
+The `ViewEngine` class handles:
 
----
-
-## 📦 Tech Stack
-
-- **Framework:** [TezX](https://github.com/tezxjs/tezx)
-- **Language:** TypeScript / JavaScript
-- **Template Engine (optional):** `ejs`, `pug`, `hbs`, `mustache`, or `nunjucks`
-- **Runtime Support:** Node.js, Bun, Deno (via compatibility)
+- Compiling templates at runtime
+- Injecting dynamic data into views
+- Supporting multiple template engines with the same API
 
 ---
 
-## 🛠️ Getting Started
-
-### 1. Install Dependencies
+## 📁 File structure
 
 ```bash
-npm install
-# or
-bun install
-````
-
-### 2. Start Development Server
-
-```bash
-npm run dev
-# or
-bun run dev
-```
-
-### 3. Open in Browser
-
-```bash
-http://localhost:3000
+.src
+├── views/
+│   └── home.ejs
+└── index.ts
 ```
 
 ---
 
-## 🔐 Environment Variables
+## 🧪 Example Usage
 
-Create a `.env` file at the project root:
+```ts
+import { ViewEngine } from "@tezx/view-engine";
 
-```bash
-PORT=3000
-NODE_ENV=development
+const views = new ViewEngine("ejs", "./views");
 
-# For OAuth2 templates
-GOOGLE_CLIENT_ID=your-client-id
-GOOGLE_CLIENT_SECRET=your-secret
+app.get("engine", async (ctx) => {
+  const html = await views.render("home", {
+    title: "TezX SSR Page",
+    user: ctx.user || { name: "Guest" },
+  });
+  return ctx.html(html);
+});
 ```
 
 ---
 
-## 📁 Project Structure
+## 💡 Notes
 
-```
-.
-├── public/             # Static files (images, js, css)
-├── views/              # SSR templates (optional)
-├── src/
-│   ├── index.ts        # Entry point
-│   └── routes/         # Route modules
-├── .env
-├── .gitignore
-└── package.json
-```
+- The `ViewEngine` class auto-caches template files unless disabled.
+- You can switch engines by passing a different type like `"pug"`, `"hbs"`, etc.
+- All rendering is asynchronous.
 
 ---
 
-## 🧪 Example Commands
-
-```bash
-# Build the app
-bun run build
-
-# Start the server in production
-bun start
-
-# Run a TezX test (if added)
-bun test
-```
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-## 📄 License
-
-MIT © [SRAKIB17](https://github.com/SRAKIB17)
-
----
-
-## 💚 Powered by
-
-[TezX Framework](https://github.com/tezxjs/TezX) · Made with performance in mind
-
----
+Happy TezX templating! 🎉

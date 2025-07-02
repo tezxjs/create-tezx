@@ -10,7 +10,7 @@ This starter is designed to help you spin up production-ready APIs or SSR apps i
 
 - ⚡️ Ultra-fast routing & middleware
 - 🔒 Built-in WebSocket & OAuth2-ready
-- 🔧 Plug-and-play \`ViewEngine\` for SSR
+- 🔧 Plug-and-play `ViewEngine` for SSR
 - 🌱 Environment-based config support
 - 🧪 Minimal, testable, and extendable codebase
 
@@ -18,9 +18,9 @@ This starter is designed to help you spin up production-ready APIs or SSR apps i
 
 ## 📦 Tech Stack
 
-- **Framework:** [TezX](https://github.com/tezxjs/tezx)
+- **Framework:** [TezX](https://github.com/tezxjs/TezX)
 - **Language:** TypeScript / JavaScript
-- **Template Engine (optional):** \`ejs\`, \`pug\`, \`hbs\`, \`mustache\`, or \`nunjucks\`
+- **Template Engine (optional):** `ejs`, `pug`, `hbs`, `mustache`, or `nunjucks`
 - **Runtime Support:** Node.js, Bun, Deno (via compatibility)
 
 ---
@@ -29,51 +29,46 @@ This starter is designed to help you spin up production-ready APIs or SSR apps i
 
 ### 1. Install Dependencies
 
-\`\`\`bash
+```bash
 npm install
-
 # or
-
 bun install
-\`\`\`\`
+````
 
 ### 2. Start Development Server
 
-\`\`\`bash
+```bash
 npm run dev
-
 # or
-
 bun run dev
-\`\`\`
+```
 
 ### 3. Open in Browser
 
-\`\`\`
-<http://localhost:3000>
-\`\`\`
+```bash
+http://localhost:3000
+```
 
 ---
 
 ## 🔐 Environment Variables
 
-Create a \`.env\` file at the project root:
+Create a `.env` file at the project root:
 
-\`\`\`
+```bash
 PORT=3000
 NODE_ENV=development
 
 # For OAuth2 templates
-
 GOOGLE_CLIENT_ID=your-client-id
 GOOGLE_CLIENT_SECRET=your-secret
-\`\`\`
+```
 
 ---
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 .
 ├── public/             # Static files (images, js, css)
 ├── views/              # SSR templates (optional)
@@ -83,26 +78,22 @@ GOOGLE_CLIENT_SECRET=your-secret
 ├── .env
 ├── .gitignore
 └── package.json
-\`\`\`
+```
 
 ---
 
 ## 🧪 Example Commands
 
-\`\`\`bash
-
+```bash
 # Build the app
-
 bun run build
 
 # Start the server in production
-
 bun start
 
 # Run a TezX test (if added)
-
 bun test
-\`\`\`
+```
 
 ---
 

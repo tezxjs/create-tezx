@@ -6,7 +6,7 @@
   "scripts": { 
     "build:esm": "tsc --module ESNext --outDir dist --removeComments",
     "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
-    "build": "bun build:cjs && bun build:esm && bun build:dts",
+    "build": "bun build:esm && bun build:dts",
     "start": "bun dist/index.js",
     "dev": "bun run --hot --watch src/index.ts"
   },

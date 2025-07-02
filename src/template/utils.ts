@@ -8,6 +8,7 @@ export const packageManagerCommands = (pm: string, version: string): any => ({
 });
 
 export type TemplateObjectType = {
+    readme: string,
     content: string,
     import: string[],
     package?: Package,

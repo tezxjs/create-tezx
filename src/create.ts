@@ -6,7 +6,7 @@ import { TemplateContent } from "./template/index.js";
 import { TemplateObjectType } from "./template/utils.js";
 import { arrowSelect } from "./utils/arrowSelect.js";
 import { colorText } from "./utils/colors.js";
-import { gitignore, index, packageJson } from "./utils/fileContent.js";
+import { gitignore, index, packageJson, README } from "./utils/fileContent.js";
 
 export type Config = {
   directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env" | "useStatic" | "staticFolder", string>
@@ -151,6 +151,7 @@ export async function create(config: Config) {
 
   packageJson({ projectName: projectName, env: env, root: root, ts: !!ts, template, choiceStep: choiceStep })
   gitignore({ root })
+  README({ root, readme: template?.readme })
   rl.close();
 
 

@@ -169,30 +169,110 @@ export let ws = `
     </body>
 </html>
 `
-
 export const wsTemplate: TemplateObjectType = {
+    readme: `
+# 🔌 TezX WebSocket Example
+
+This example demonstrates how to set up a WebSocket server using \`upgradeWebSocket\` from \`tezx/ws\`.
+
+---
+
+## 🚀 Features
+
+- Upgrade HTTP requests to WebSocket connections
+- Handle events: \`open\`, \`message\`, and \`close\`
+- Respond to \`ping\` with \`pong\`
+- Echo received messages back to the client
+- Works with Node.js and Bun
+
+---
+
+## 🔧 Setup
+
+### 1. Install required package (if needed)
+
+TezX WebSocket support is built-in with \`tezx/ws\`. If your setup doesn't include it:
+
+\`\`\`bash
+npm install tezx
+# or
+bun add tezx
+\`\`\`
+
+---
+
+### 2. How it works
+
+- Connect to \`/ws\` via a browser or WebSocket client
+- On connect: sends a welcome message
+- On message: replies with either \`pong\` or echoes back the message
+- Logs disconnection reason
+
+---
+
+## 🧪 Client Test File
+
+A simple HTML file is included in \`public/ws.html\`:
+
+\`\`\`html
+<script>
+  const ws = new WebSocket("ws://localhost:3000/ws");
+
+  ws.onopen = () => {
+    console.log("Connected to WebSocket!");
+    ws.send("ping");
+  };
+
+  ws.onmessage = (event) => {
+    console.log("Message:", event.data);
+  };
+
+  ws.onclose = () => {
+    console.log("Disconnected.");
+  };
+</script>
+\`\`\`
+
+---
+
+## 📁 File Structure
+
+\`\`\`
+.
+├── public/
+│   └── ws.html
+└── src
+    └── index.ts
+\`\`\`
+
+---
+
+Enjoy real-time power with TezX! ⚡️
+`.trim(),
+
     content: `
 const socket = [];
+
 app.get(
   "/ws",
   upgradeWebSocket(
     (ctx) => {
       return {
-        // make sure it is work with nodejs
+        // ✅ Node.js-compatible WebSocket handler
         open: (ws) => {
-            socket.push(ws);
-            console.log("WebSocket connected");
-            ws.send("👋 Welcome to TezX WebSocket!");
+          socket.push(ws);
+          console.log("WebSocket connected");
+          ws.send("👋 Welcome to TezX WebSocket!");
         },
         message: (ws, msg) => {
-            if (typeof msg === "string" && msg === "ping") {
-                ws.send("pong 🏓");
-            } else if (msg !== undefined) {
-                ws.send("Echo: " + msg);
-            }
+          if (typeof msg === "string" && msg === "ping") {
+            ws.send("pong 🏓");
+          } else if (msg !== undefined) {
+            ws.send("Echo: " + msg);
+          }
         },
         close: (ws, data) => {
-            console.log(\`WebSocket closed: \${ data?.reason ?? "No reason provided"}\`);
+          console.log(\`WebSocket closed: \${data?.reason ?? "No reason provided"}\`);
         },
       };
     },
@@ -207,10 +287,14 @@ app.get(
     return ctx.sendFile("public/ws.html");
   },
 );
-    `,
-    files: [{
-        content: ws,
-        path: 'public/ws.html'
-    }],
+`.trim(),
+
+    files: [
+        {
+            content: ws,
+            path: "public/ws.html"
+        }
+    ],
+
     import: [`import { upgradeWebSocket } from "tezx/ws";`],
-}
+};

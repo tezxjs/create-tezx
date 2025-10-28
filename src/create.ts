@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path, { join, resolve } from "node:path";
 import readline from "node:readline";
 import { TemplateContent } from "./template/index.js";
-import { TemplateObjectType } from "./template/utils.js";
+import { TemplateReturnType } from "./template/utils.js";
 import { arrowSelect } from "./utils/arrowSelect.js";
 import { colorText } from "./utils/colors.js";
 import { gitignore, index, packageJson, README } from "./utils/fileContent.js";
@@ -68,12 +68,12 @@ export async function create(config: Config) {
 
   let staticFolder = options?.['staticFolder'] || 'public';
   let useStatic = true;
-  let template: TemplateObjectType = {
+  let template: TemplateReturnType = {
     content: "",
     import: [],
     readme: "",
     files: []
-  };
+  }
 
   if (options?.["t"] || options?.["template"]) {
     const templateKey = options["t"] || options["template"];
@@ -83,7 +83,7 @@ export async function create(config: Config) {
       console.error(`ℹ️ Available templates: ${Object.keys(TemplateContent).join(", ")}`);
       process.exit(0);
     }
-    template = availableTemplate;
+    template = availableTemplate(env);
   }
   else {
     ts = !!(options?.['ts'] || (await ask("🟦 Use TypeScript? (y/N): ") as any).toLowerCase() === "y");
@@ -150,12 +150,10 @@ export async function create(config: Config) {
     staticFolder: staticFolder,
     useStatic: useStatic
   })
-
   packageJson({ projectName: projectName, env: env, root: root, ts: !!ts, template, choiceStep: choiceStep })
   gitignore({ root })
   README({ root, readme: template?.readme })
   rl.close();
-
 
   template?.files?.forEach((r) => {
     let folder = path.join(root, path.dirname(r?.path));

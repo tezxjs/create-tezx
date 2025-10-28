@@ -1,5 +1,5 @@
 
-import { TemplateObjectType } from "./utils.js";
+import { TemplateFnObjectType } from "./utils.js";
 export let ws = `
 <!DOCTYPE html>
 <html lang="en">
@@ -169,8 +169,9 @@ export let ws = `
     </body>
 </html>
 `
-export const wsTemplate: TemplateObjectType = {
-    readme: `
+export const wsTemplate: TemplateFnObjectType = (env) => {
+    return {
+        readme: `
 # 🔌 TezX WebSocket Example
 
 This example demonstrates how to set up a WebSocket server using \`upgradeWebSocket\` from \`tezx/ws\`.
@@ -250,7 +251,7 @@ A simple HTML file is included in \`public/ws.html\`:
 Enjoy real-time power with TezX! ⚡️
 `.trim(),
 
-    content: `
+        content: `
 const socket = [];
 
 app.get(
@@ -289,12 +290,13 @@ app.get(
 );
 `.trim(),
 
-    files: [
-        {
-            content: ws,
-            path: "public/ws.html"
-        }
-    ],
+        files: [
+            {
+                content: ws,
+                path: "public/ws.html"
+            }
+        ],
 
-    import: [`import { upgradeWebSocket } from "tezx/ws";`],
+        import: [`import { upgradeWebSocket } from "tezx/${env}";`],
+    }
 };

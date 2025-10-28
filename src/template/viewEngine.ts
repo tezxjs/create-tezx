@@ -1,6 +1,7 @@
-import { packageManagerCommands, TemplateObjectType } from "./utils.js";
+import { packageManagerCommands, TemplateFnObjectType } from "./utils.js";
 
-export const viewEngineTemplate: TemplateObjectType = {
+export const viewEngineTemplate: TemplateFnObjectType = () => {
+  return {
     readme: `
 # TezX View Engine Example
 
@@ -71,8 +72,8 @@ app.get("engine", async (ctx) => {
   `.trim(),
 
     files: [
-        {
-            content: `
+      {
+        content: `
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -84,14 +85,15 @@ app.get("engine", async (ctx) => {
   </body>
 </html>
       `.trim(),
-            path: "views/home.ejs",
-        },
+        path: "views/home.ejs",
+      },
     ],
 
     import: [`import { ViewEngine } from "@tezx/view-engine";`],
 
     package: [
-        packageManagerCommands("@tezx/view-engine", "^1.0.3"),
-        packageManagerCommands("ejs", "^3.1.10"),
+      packageManagerCommands("@tezx/view-engine", "^1.0.3"),
+      packageManagerCommands("ejs", "^3.1.10"),
     ],
+  }
 };

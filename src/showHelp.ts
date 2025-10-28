@@ -1,13 +1,13 @@
 import { colorText } from "./utils/colors.js";
 
 export function showHelp() {
-    console.log(`
-        ${colorText("╭─────────────────────────────────────────────╮", "gray")}
-        ${colorText("│", "gray")}     ${colorText("⚡ Create TezX", "yellow")} - Scaffold your next backend app     ${colorText("│", "gray")}
-        ${colorText("╰─────────────────────────────────────────────╯", "gray")}
+  console.log(`
+        ${colorText("╭───────────────────────────────────────────────────────╮", "gray")}
+        ${colorText("│", "gray")}${colorText("   ⚡ Create TezX", "yellow")} - Scaffold your next backend app     ${colorText("│", "gray")}
+        ${colorText("╰───────────────────────────────────────────────────────╯", "gray")}
         
         ${colorText("📦 Usage:", "cyan")} 
-          ${colorText("create-tezx", "green")} ${colorText("[directory] [...options]", "gray")}
+         ${colorText("create-tezx", "green")} ${colorText("[directory] [...options]", "gray")}
         
         ${colorText("🚀 Quick Start:", "cyan")}
           ${colorText("npm", "magenta")} create tezx@latest
@@ -42,5 +42,5 @@ export function showHelp() {
         
         ${colorText("🧑‍💻 Author:", "cyan")}
           Rakibul Islam ${colorText("<https://github.com/srakib17>", "blue")}`);
-    process.exit(0);
+  process.exit(0);
 }

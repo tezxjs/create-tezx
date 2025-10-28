@@ -7,10 +7,12 @@ export const packageManagerCommands = (pm: string, version: string): any => ({
     pnpm: ["pnpm add", pm]
 });
 
-export type TemplateObjectType = {
+export type TemplateReturnType = {
     readme: string,
     content: string,
     import: string[],
     package?: Package,
     files: { path: string, content: string }[]
-}
+};
+
+export type TemplateFnObjectType = (env: string) => TemplateReturnType

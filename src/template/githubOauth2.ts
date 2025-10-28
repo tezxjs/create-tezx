@@ -1,7 +1,8 @@
-import { packageManagerCommands, TemplateObjectType } from "./utils.js";
+import { packageManagerCommands, TemplateFnObjectType } from "./utils.js";
 
-export const githubOauth2Template: TemplateObjectType = {
-    readme: `
+export const githubOauth2Template: TemplateFnObjectType = (env) => {
+    return {
+        readme: `
 # 🔐 GitHub OAuth2 Example for TezX
 
 This example demonstrates how to implement GitHub OAuth2 login using \`@tezx/github-oauth2\`.
@@ -22,7 +23,7 @@ This example demonstrates how to implement GitHub OAuth2 login using \`@tezx/git
 ### 1. Install the required package
 
 \`\`\`bash
-${Object.values(packageManagerCommands('@tezx/github-oauth2', '^1.0.3'))?.filter((r: any) => typeof r !== 'string')?.join("\n#or\n")}
+${Object.values(packageManagerCommands('@tezx/github-oauth2', '^1.0.9'))?.filter((r: any) => typeof r !== 'string')?.join("\n#or\n")}
 \`\`\`
 
 ### 2. Add environment variables
@@ -50,7 +51,7 @@ Use callback URL:
 app.get('/github', getGithubOAuthURL({
   authClient: client,
 }), (ctx) => {
-  return ctx.redirect(ctx.state.get('github_oauth_url'));
+  return ctx.redirect(ctx.github.oauth_url);
 });
 \`\`\`
 
@@ -93,7 +94,7 @@ app.get('/github/callback', verifyGithubToken({
 Login securely and build smarter auth with TezX! 🚀
 `.trim(),
 
-    content: `
+        content: `
 // 1. Initialize OAuth2 client
 const client = GitHubOauthClient({
     clientId: process.env.GITHUB_CLIENT_ID,
@@ -105,7 +106,7 @@ const client = GitHubOauthClient({
 app.get('/github', getGithubOAuthURL({
     authClient: client,
 }), (ctx) => {
-    return ctx.redirect(ctx.state.get('github_oauth_url'));
+    return ctx.redirect(ctx.github.oauth_url);
 });
 
 // Step 2: Verify GitHub token and handle user session
@@ -125,18 +126,19 @@ app.get('/github/callback', verifyGithubToken({
 });
   `.trim(),
 
-    files: [
-        {
-            content: `GITHUB_CLIENT_ID=12323\nGITHUB_CLIENT_SECRET=234234`,
-            path: ".env"
-        }
-    ],
+        files: [
+            {
+                content: `GITHUB_CLIENT_ID=12323\nGITHUB_CLIENT_SECRET=234234`,
+                path: ".env"
+            }
+        ],
 
-    import: [
-        `import { GitHubOauthClient, getGithubOAuthURL, verifyGithubToken } from '@tezx/github-oauth2';`
-    ],
+        import: [
+            `import { GitHubOauthClient, getGithubOAuthURL, verifyGithubToken } from '@tezx/github-oauth2';`
+        ],
 
-    package: [
-        packageManagerCommands('@tezx/github-oauth2', "^1.0.3")
-    ]
+        package: [
+            packageManagerCommands('@tezx/github-oauth2', "^1.0.9")
+        ]
+    }
 };

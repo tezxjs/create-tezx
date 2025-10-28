@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { TemplateObjectType } from "../template/utils.js";
+import { TemplateReturnType } from "../template/utils.js";
 import { version } from "../version.js";
 
 let defaultReadme = `
@@ -128,7 +128,7 @@ export let index = ({
   root,
   env, useStatic = false, staticFolder }: {
     ts: boolean,
-    template?: TemplateObjectType,
+    template?: TemplateReturnType,
     root: string,
     env: string,
     useStatic?: boolean,
@@ -138,10 +138,48 @@ export let index = ({
   const mainFile = join(root, ts ? "src/index.ts" : "src/index.js");
 
   mkdirSync(join(root, "src"), { recursive: true });
+  let footer = "";
+  if (env === 'node') {
+    template?.import.push(`import { createServer } from "node:http";`);
+    template?.import.push(`import { mountTezXOnNode } from "tezx/node";`)
+    footer = `
+const server = createServer();
+
+// Mount TezX to handle requests
+mountTezXOnNode(app, server);
+
+// Start listening on the defined port
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(\`🚀 TezX is running at http://localhost:$\{PORT\}\`);
+});
+`}
+  else if (env === 'bun') {
+    template?.import?.push(`import { wsHandlers } from "tezx/bun";`)
+    footer = `
+Bun.serve({
+  port: Number(process.env.PORT) || 3001,
+  reusePort: true, // Enables multi-process clustering
+  fetch(req, server) {
+    return app.serve(req, server); // Handle requests via TezX
+  },
+  websocket: wsHandlers({
+    // Optional WebSocket configure
+  })
+});
+    `
+  }
+  else if (env === 'deno') {
+    footer = ` 
+Deno.serve({ port: Number(Deno.env.get("PORT") || 5000) }, (req, connInfo) => {
+  return app.serve(req, connInfo);
+});
+    `
+  }
 
   let code = `
 import { TezX } from "tezx";
-import { ${env}Adapter ,loadEnv} from "tezx/${env}";
+import { loadEnv, serveStatic} from "tezx/${env}";
 import { logger } from "tezx/middleware";
 ${template?.import?.join("\n")}
 const app = new TezX({
@@ -153,13 +191,10 @@ app.use([logger()]);
 
 app.get("/", (ctx) => ctx.text("Hello from TezX (${env})"));
 
-${useStatic ? `app.static("${staticFolder || "public"}");` : ""}
+${useStatic ? `app.static(serveStatic("${staticFolder || "public"}"));` : ""}
 ${template?.content ? `\n${template?.content?.trim()}\n` : ""}
-${env}Adapter(app).listen(3000, () => {
-  console.log("🚀 TezX running on http://localhost:3000");
-});
+${footer}
 `;
-
 
   if (ts) {
     let tsconfig = `
@@ -187,7 +222,6 @@ ${env}Adapter(app).listen(3000, () => {
   `.trim();
     writeFileSync(join(root, 'tsconfig.json'), tsconfig);
   }
-
   writeFileSync(mainFile, code.trim());
 }
 
@@ -197,7 +231,7 @@ export let packageJson = ({ template, root, projectName, env, ts, useWS, choiceS
     install: string;
     dev: string;
     build: string;
-  }, template: TemplateObjectType, root: string, projectName: string, env: string, ts?: boolean, useWS?: boolean
+  }, template: TemplateReturnType, root: string, projectName: string, env: string, ts?: boolean, useWS?: boolean
 }) => {
   let install: string[] = [];
   if (Array.isArray(template?.package)) {
@@ -250,10 +284,9 @@ export let packageJson = ({ template, root, projectName, env, ts, useWS, choiceS
     "tezx": "^${version}"${env == 'node' ? `,\n    "tsx": "^4.19.2"` : ""}${useWS && env == 'node' ? `,\n    "ws": "^8.18.1"` : ""}${install.length ? `,\n    ${install?.join(",\n    ")}` : ""}
   },
   "devDependencies": {
-    "@types/node": "^22.13.14"
+    "@types/node": "^22.13.14"${env === "bun" ? `,\n"@types/bun": "^1.3.1"` : (env === 'deno' ? `,\n"@types/deno" : "^2.5.0"` : "")}
   }
 }`.trim();
-
   writeFileSync(join(root, 'package.json'), json);
 }
 

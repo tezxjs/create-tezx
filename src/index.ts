@@ -30,7 +30,6 @@ import { showVersion } from "./showVersion.js";
 
     for (let i = 0; i < argv.length; i++) {
         const current = argv[i];
-
         // Detect flags like --template or -t
         if (current.startsWith("--")) {
             const key = current.slice(2);

@@ -157,8 +157,9 @@ server.listen(PORT, () => {
   else if (env === 'bun') {
     template?.import?.push(`import { wsHandlers } from "tezx/bun";`)
     footer = `
+let PORT = Number(process.env.PORT) || 3000;
 Bun.serve({
-  port: Number(process.env.PORT) || 3001,
+  port: PORT,
   reusePort: true, // Enables multi-process clustering
   fetch(req, server) {
     return app.serve(req, server); // Handle requests via TezX
@@ -167,13 +168,17 @@ Bun.serve({
     // Optional WebSocket configure
   })
 });
+console.log(\`🚀 TezX is running at http://localhost:$\{PORT\}\`);
     `
   }
   else if (env === 'deno') {
     footer = ` 
-Deno.serve({ port: Number(Deno.env.get("PORT") || 5000) }, (req, connInfo) => {
+let PORT = Number(process.env.PORT) || 3000;
+Deno.serve({ port: PORT }, (req, connInfo) => {
   return app.serve(req, connInfo);
 });
+console.log(\`🚀 TezX is running at http://localhost:$\{PORT\}\`);
+
     `
   }
 

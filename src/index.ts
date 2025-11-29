@@ -62,15 +62,10 @@ import { showVersion } from "./showVersion.js";
     if (options["y"] === "true" || options["yes"] === "true") {
         // auto set values
         config.options["ts"] = "true";
-
         config.options["useStatic"] = "true";
         config.options["staticFolder"] = "public";
         config.options["pm"] = packageManager?.includes((config.options?.p || config?.options?.pm)) ? (config.options?.p || config?.options?.pm) : "npm";
         config.options["p"] = packageManager?.includes((config.options?.p || config?.options?.pm)) ? (config.options?.p || config?.options?.pm) : "npm";
-
-        config.options["env"] = runtime?.includes((config.options?.env || config?.options?.runtime)) ? (config.options?.env || config?.options?.runtime) : "node";
-        config.options["runtime"] = runtime?.includes((config.options?.env || config?.options?.runtime)) ? (config.options?.env || config?.options?.runtime) : "node";
-
         config.options["install"] = "true";
     }
 

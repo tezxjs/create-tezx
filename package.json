@@ -4,16 +4,10 @@
   "description": "",
   "scripts": {
     "clean": "rm -rf dist",
-    "build:pkgroll": "pkgroll --clean-dist --minify",
-    "build:es": "node build.mjs",
-    "build:cjs": "tsc --module CommonJS --outDir dist/cjs --removeComments",
-    "build:esm": "tsc --module ESNext --outDir dist --removeComments",
-    "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
-    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:dts",
+    "pkgroll": "pkgroll --clean-dist --minify",
+    "es": "node build.mjs",
     "bun": "bun run --hot --watch src/index.ts plugin-devlopement -t view-engine -y",
-    "node": "nodemon app.ts",
     "check": "bun run --hot --watch src/index.ts",
-    "deno": "deno run --watch --allow-all --unstable-sloppy-imports app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "exports": {

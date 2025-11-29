@@ -5,13 +5,13 @@ import { viewEngineTemplate } from "./viewEngine.js"
 import { wsTemplate } from "./ws.js"
 
 export let TemplateContent: Record<"minimal" | 'ws' | 'view-engine' | 'github-oauth2' | 'google-oauth2', TemplateFnObjectType> = {
-    "minimal": () => ({
+    "minimal": {
         readme: "",
         content: "",
         files: [],
         import: [],
         package: [],
-    }),
+    },
     'ws': wsTemplate,
     "github-oauth2": githubOauth2Template,
     "google-oauth2": googleOauth2Template,

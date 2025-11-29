@@ -14,13 +14,11 @@ export function showHelp() {
           ${colorText("yarn", "magenta")} create tezx
           ${colorText("pnpm", "magenta")} create tezx@latest
           ${colorText("bun", "magenta")} create tezx@latest
-          ${colorText("deno", "magenta")} run -A npm:create-tezx@latest
         
         ${colorText("🎛️  Options:", "cyan")}
         
           ${colorText("-t, --template <name>", "green")}    Use a specific starter template
           ${colorText("--ts, -ts", "green")}                Enable TypeScript setup
-          ${colorText("--env, --runtime <env>", "green")}   Set runtime: node | bun | deno
           ${colorText("-p, --pm <manager>", "green")}       Package manager: npm | bun | yarn | pnpm
           ${colorText("-i, --install", "green")}            Automatically install dependencies
           ${colorText("-y, --yes", "green")}                Skip prompts using default options
@@ -28,7 +26,7 @@ export function showHelp() {
           ${colorText("-h, --help", "green")}               Display this help message
         
         ${colorText("🧰 Examples:", "cyan")}
-          ${colorText("npm create tezx@latest my-app --template ws --ts --env node", "gray")}
+          ${colorText("npm create tezx@latest my-app --template ws --ts", "gray")}
           ${colorText("bun create tezx@latest -- --install --pm bun", "gray")}
         
         ${colorText("📁 Available Templates:", "cyan")}

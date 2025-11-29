@@ -1,8 +1,7 @@
 import { packageManagerCommands, TemplateFnObjectType } from "./utils.js";
 
-export const googleOauth2Template: TemplateFnObjectType = () => {
-  return {
-    readme: `
+export const googleOauth2Template: TemplateFnObjectType = {
+  readme: `
 # 🔐 Google OAuth2 Example for TezX
 
 This example demonstrates how to use \`@tezx/google-oauth2\` to implement Google OAuth2 login in your TezX app.
@@ -26,13 +25,13 @@ Choose your package manager and install:
 
 \`\`\`bash
 ${Object.values(packageManagerCommands('@tezx/google-oauth2', '^1.0.13'))
-        .filter((r: any) => typeof r !== 'string')
-        .join('\n# or\n')}
+      .filter((r: any) => typeof r !== 'string')
+      .join('\n# or\n')}
 
 # Plus Google OAuth SDK
 ${Object.values(packageManagerCommands('@googleapis/oauth2', '^2.0.1'))
-        .filter((r: any) => typeof r !== 'string')
-        .join('\n# or\n')}
+      .filter((r: any) => typeof r !== 'string')
+      .join('\n# or\n')}
 \`\`\`
 
 ---
@@ -113,7 +112,7 @@ app.get('/auth/callback', verifyGoogleToken({
 Secure your apps with Google the easy way 🔒
 `.trim(),
 
-    content: `
+  content: `
 // 1. Initialize OAuth2 client
 const client = GoogleOauthClient({
   clientId: process.env.GOOGLE_CLIENT_ID,
@@ -163,20 +162,19 @@ app.get('/auth/callback', verifyGoogleToken({
 });
 `.trim(),
 
-    files: [
-      {
-        content: `GOOGLE_CLIENT_ID=12323\nGOOGLE_CLIENT_SECRET=234234\n`,
-        path: ".env"
-      }
-    ],
+  files: [
+    {
+      content: `GOOGLE_CLIENT_ID=12323\nGOOGLE_CLIENT_SECRET=234234\n`,
+      path: ".env"
+    }
+  ],
 
-    import: [
-      `import { GoogleOauthClient, getGoogleOAuthURL, verifyGoogleToken } from "@tezx/google-oauth2";`
-    ],
+  import: [
+    `import { GoogleOauthClient, getGoogleOAuthURL, verifyGoogleToken } from "@tezx/google-oauth2";`
+  ],
 
-    package: [
-      packageManagerCommands('@tezx/google-oauth2', "^1.0.13"),
-      packageManagerCommands("@googleapis/oauth2", "^2.0.1")
-    ]
-  }
+  package: [
+    packageManagerCommands('@tezx/google-oauth2', "^1.0.13"),
+    packageManagerCommands("@googleapis/oauth2", "^2.0.1")
+  ]
 };

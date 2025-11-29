@@ -1,8 +1,7 @@
 import { packageManagerCommands, TemplateFnObjectType } from "./utils.js";
 
-export const githubOauth2Template: TemplateFnObjectType = (env) => {
-    return {
-        readme: `
+export const githubOauth2Template: TemplateFnObjectType = {
+    readme: `
 # 🔐 GitHub OAuth2 Example for TezX
 
 This example demonstrates how to implement GitHub OAuth2 login using \`@tezx/github-oauth2\`.
@@ -94,7 +93,7 @@ app.get('/github/callback', verifyGithubToken({
 Login securely and build smarter auth with TezX! 🚀
 `.trim(),
 
-        content: `
+    content: `
 // 1. Initialize OAuth2 client
 const client = GitHubOauthClient({
     clientId: process.env.GITHUB_CLIENT_ID,
@@ -126,19 +125,18 @@ app.get('/github/callback', verifyGithubToken({
 });
   `.trim(),
 
-        files: [
-            {
-                content: `GITHUB_CLIENT_ID=12323\nGITHUB_CLIENT_SECRET=234234`,
-                path: ".env"
-            }
-        ],
+    files: [
+        {
+            content: `GITHUB_CLIENT_ID=12323\nGITHUB_CLIENT_SECRET=234234`,
+            path: ".env"
+        }
+    ],
 
-        import: [
-            `import { GitHubOauthClient, getGithubOAuthURL, verifyGithubToken } from '@tezx/github-oauth2';`
-        ],
+    import: [
+        `import { GitHubOauthClient, getGithubOAuthURL, verifyGithubToken } from '@tezx/github-oauth2';`
+    ],
 
-        package: [
-            packageManagerCommands('@tezx/github-oauth2', "^1.0.9")
-        ]
-    }
+    package: [
+        packageManagerCommands('@tezx/github-oauth2', "^1.0.9")
+    ]
 };

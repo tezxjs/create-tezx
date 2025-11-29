@@ -4,120 +4,193 @@ import { TemplateReturnType } from "../template/utils.js";
 import { version } from "../version.js";
 
 let defaultReadme = `
-# 🚀 TezX Starter Template
+# ⚡ TezX – High-Performance JavaScript Framework for **Bun**
 
-Welcome to the **TezX Starter Template** — a blazing-fast, full-featured backend template built on [TezX](https://github.com/tezxjs/tezx), the lightweight web framework inspired by the best of Express, Hono, and Bun.
+**TezX** is a modern, ultra-fast, and lightweight JavaScript framework built specifically for **Bun**.
+With a clean API, powerful routing, WebSocket support, middleware stacking, and native static file serving — TezX helps you build scalable applications with unmatched speed.
 
-This starter is designed to help you spin up production-ready APIs or SSR apps in seconds.
-
----
-
-## ✨ Features
-
-- ⚡️ Ultra-fast routing & middleware
-- 🔒 Built-in WebSocket & OAuth2-ready
-- 🔧 Plug-and-play \`ViewEngine\` for SSR
-- 🌱 Environment-based config support
-- 🧪 Minimal, testable, and extendable codebase
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tezxjs/TezX)
 
 ---
 
-## 📦 Tech Stack
+## 🚀 Why TezX (Built for Bun)?
 
-- **Framework:** [TezX](https://github.com/tezxjs/tezx)
-- **Language:** TypeScript / JavaScript
-- **Template Engine (optional):** \`ejs\`, \`pug\`, \`hbs\`, \`mustache\`, or \`nunjucks\`
-- **Runtime Support:** Node.js, Bun, Deno (via compatibility)
+* ⚡ **Blazing Fast** — Fully optimized for Bun’s event loop & native performance.
+* 🧩 **Minimal, Clean API** — Developer-friendly and intuitive.
+* 🗂 **Native Static Serving** — No external dependencies needed.
+* 🔌 **Powerful Middleware Engine** — Compose any logic effortlessly.
+* 🧭 **Advanced Routing** — Dynamic, nested, and pattern-based.
+* 🔐 **Secure by Default** — Built-in safe context handling.
+* 📡 **WebSocket Support** — Real-time apps made easy with \`wsHandlers\`.
+* ♻️ **Multi-Process Ready** — Via Bun’s \`reusePort\`.
 
 ---
 
-## 🛠️ Getting Started
-
-### 1. Install Dependencies
+## 📦 Installation
 
 \`\`\`bash
-npm install
+bun add tezx
 # or
-bun install
-\`\`\`\`
-
-### 2. Start Development Server
-
-\`\`\`bash
-npm run dev
-# or
-bun run dev
-\`\`\`
-
-### 3. Open in Browser
-
-\`\`\`bash
-http://localhost:3000
+npm install tezx
 \`\`\`
 
 ---
 
-## 🔐 Environment Variables
+## ⚡ Quick Start (Bun)
 
-Create a \`.env\` file at the project root:
+\`\`\`ts
+import { TezX } from "tezx";
+import { logger } from "tezx/middleware";
+import { serveStatic } from "tezx/static";
+import { wsHandlers } from "tezx/ws";
 
-\`\`\`bash
-PORT=3000
-NODE_ENV=development
+const app = new TezX();
 
-# For OAuth2 templates
-GOOGLE_CLIENT_ID=your-client-id
-GOOGLE_CLIENT_SECRET=your-secret
+// Middlewares
+app.use(logger());
+
+// Static files
+app.static(serveStatic("/", "./static"));
+
+// Route
+app.get("/", (ctx) =>
+  ctx.html(\`
+    <h1>Welcome to TezX</h1>
+    <p>High-performance JavaScript framework optimized for Bun.</p>
+\`)
+);
+
+// Server
+const port = Number(process.env.PORT) || 3001;
+
+Bun.serve({
+  port,
+  reusePort: true,
+  fetch(req, server) {
+    return app.serve(req, server);
+  },
+  websocket: wsHandlers({
+    // Optional WebSocket config
+  }),
+});
+
+console.log(\`🚀 TezX server running at http://localhost:$\{port}\`);
 \`\`\`
 
 ---
 
-## 📁 Project Structure
+## ▶ Run the Server
 
-\`\`\`
-.
-├── public/             # Static files (images, js, css)
-├── views/              # SSR templates (optional)
-├── src/
-│   ├── index.ts        # Entry point
-│   └── routes/         # Route modules
-├── .env
-├── .gitignore
-└── package.json
+\`\`\`bash
+bun run server.ts
+  \`\`\`
+
+---
+
+## 🔌 Middleware Example
+
+\`\`\`ts
+app.use((ctx, next) => {
+  console.log("➡ Request:", ctx.req.url);
+  return next();
+});
 \`\`\`
 
 ---
 
-## 🧪 Example Commands
+## 🗂 Static File Serving
+
+\`\`\`ts
+import { serveStatic } from "tezx/static";
+
+app.static(serveStatic("/assets", "./assets"));
+\`\`\`
+
+Access via:
 
 \`\`\`bash
-# Build the app
-bun run build
+http://localhost:3001/assets/your-file.ext
+\`\`\`
 
-# Start the server in production
-bun start
+---
 
-# Run a TezX test (if added)
-bun test
+## 🧭 Routing
+
+\`\`\`ts
+app.get("/about", (ctx) => ctx.html("<h1>About TezX</h1>"));
+
+app.post("/contact", async (ctx) => {
+  const body = await ctx.json();
+  return ctx.json({ received: body });
+});
+\`\`\`
+
+---
+
+## ⚠️ Error Handling
+
+\`\`\`ts
+app.onError((err, ctx) => {
+  return ctx.status(500).json({
+    error: "Internal Server Error",
+    message: err.message,
+  });
+});
+\`\`\`
+
+---
+
+## 🧪 Development Setup
+
+### \`dev\` script for Bun
+
+**package.json**
+
+\`\`\`json
+{
+  "scripts": {
+    "dev": "bun run --hot --watch src/index.ts"
+  }
+}
+\`\`\`
+
+### Example: \`src / index.ts\`
+
+\`\`\`ts
+import app from "./app";
+
+Bun.serve({
+  port: 3001,
+  reusePort: true,
+  fetch(req, server) {
+    return app.serve(req, server);
+  },
+});
 \`\`\`
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+We welcome contributions!
+
+1. Fork the repo
+2. Create a new branch
+3. Commit your changes
+4. Open a pull request
+
+👉 GitHub: **[https://github.com/tezxjs](https://github.com/tezxjs)**
 
 ---
 
-## 📄 License
+## 💖 Support TezX
 
-MIT © [SRAKIB17](https://github.com/SRAKIB17)
+If TezX helps you, consider supporting:
 
----
+* ⭐ Star on GitHub
+* 💸 Sponsor on GitHub: [https://github.com/sponsors/srakib17](https://github.com/sponsors/srakib17)
 
-## 💚 Powered by
-
-[TezX Framework](https://github.com/tezxjs/TezX) · Made with performance in mind
+Your support helps improve the framework.
 
 ---
 
@@ -126,11 +199,10 @@ export let index = ({
   ts,
   template,
   root,
-  env, useStatic = false, staticFolder }: {
+  useStatic = false, staticFolder }: {
     ts: boolean,
     template?: TemplateReturnType,
     root: string,
-    env: string,
     useStatic?: boolean,
     staticFolder: string,
   }) => {
@@ -139,24 +211,9 @@ export let index = ({
 
   mkdirSync(join(root, "src"), { recursive: true });
   let footer = "";
-  if (env === 'node') {
-    template?.import.push(`import { createServer } from "node:http";`);
-    template?.import.push(`import { mountTezXOnNode } from "tezx/node";`)
-    footer = `
-const server = createServer();
 
-// Mount TezX to handle requests
-mountTezXOnNode(app, server);
-
-// Start listening on the defined port
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(\`🚀 TezX is running at http://localhost:$\{PORT\}\`);
-});
-`}
-  else if (env === 'bun') {
-    template?.import?.push(`import { wsHandlers } from "tezx/bun";`)
-    footer = `
+  template?.import?.push(`import { wsHandlers } from "tezx/ws";`)
+  footer = `
 let PORT = Number(process.env.PORT) || 3000;
 Bun.serve({
   port: PORT,
@@ -170,31 +227,18 @@ Bun.serve({
 });
 console.log(\`🚀 TezX is running at http://localhost:$\{PORT\}\`);
     `
-  }
-  else if (env === 'deno') {
-    footer = ` 
-let PORT = Number(process.env.PORT) || 3000;
-Deno.serve({ port: PORT }, (req, connInfo) => {
-  return app.serve(req, connInfo);
-});
-console.log(\`🚀 TezX is running at http://localhost:$\{PORT\}\`);
-
-    `
-  }
-
   let code = `
 import { TezX } from "tezx";
-import { loadEnv, serveStatic} from "tezx/${env}";
+import { serveStatic } from "tezx/static";
 import { logger } from "tezx/middleware";
 ${template?.import?.join("\n")}
 const app = new TezX({
-    env: loadEnv(),
     debugMode: true,
     // Additional options
 });
 app.use([logger()]);
 
-app.get("/", (ctx) => ctx.text("Hello from TezX (${env})"));
+app.get("/", (ctx) => ctx.text("Hello from TezX"));
 
 ${useStatic ? `app.static(serveStatic("${staticFolder || "public"}"));` : ""}
 ${template?.content ? `\n${template?.content?.trim()}\n` : ""}
@@ -202,76 +246,77 @@ ${footer}
 `;
 
   if (ts) {
-    let tsconfig = `
+    const tsconfig = `
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "module": "CommonJS",
-    "target": "ESNext",
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "removeComments": false,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
     "strict": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
-  "include": [
-    "src",
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "tests"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
-  `.trim();
+    `.trim();
     writeFileSync(join(root, 'tsconfig.json'), tsconfig);
   }
   writeFileSync(mainFile, code.trim());
 }
-
-export let packageJson = ({ template, root, projectName, env, ts, useWS, choiceStep }: {
+export let packageJson = ({
+  template,
+  root,
+  projectName,
+  ts,
+  useWS,
+  choiceStep
+}: {
   choiceStep: {
     cd: string;
     install: string;
     dev: string;
     build: string;
-  }, template: TemplateReturnType, root: string, projectName: string, env: string, ts?: boolean, useWS?: boolean
+  },
+  template: TemplateReturnType,
+  root: string,
+  projectName: string,
+  ts?: boolean,
+  useWS?: boolean
 }) => {
+
   let install: string[] = [];
+
+  // Add template packages
   if (Array.isArray(template?.package)) {
     template?.package?.forEach((p) => {
       let { version, npm } = p as any || {};
-      install.push(`"${npm?.[1]}": "${version}"`)
-    })
+      install.push(`"${npm?.[1]}": "${version}"`);
+    });
   }
-  let cmd = {
-    bun: {
-      start: "bun dist/index.js",
-      dev: "bun run --hot --watch src/index.ts",
-    },
-    deno: {
-      start: "deno run --allow-all dist/index.js",
-      dev: "deno run --watch --allow-all --unstable-sloppy-imports src/index.ts",
-    },
-    node: {
-      start: "node dist/index.js",
-      dev: "tsx watch src/index.ts",
-    }
-  };
+
+  // Base devDependencies
+  let devDeps = [
+    `"@types/bun": "^1.3.1"`
+  ];
+
+  // If TypeScript enabled → add TS + Node types
+  if (ts) {
+    devDeps.push(`"typescript": "^5.8.2"`);
+    devDeps.push(`"@types/node": "^22.13.14"`);
+  }
 
   let json = `
 {
   "name": "${projectName || "tezx-app-example"}",
   "version": "1.0.0",
   "type": "module",
-  "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration. Fully compatible with Node.js, Deno, and Bun.",
-  "scripts": { ${ts ? `
-    "build:esm": "tsc --module ESNext --outDir dist --removeComments",
-    "build:dts": "tsc --module ESNext --outDir dist --declaration --emitDeclarationOnly",
-    "build": "${choiceStep?.build}",` : ""}
-    "start": "${cmd?.[env as keyof typeof cmd]?.start}",
-    "dev": "${cmd?.[env as keyof typeof cmd]?.dev}"
+  "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration.",
+  "scripts": {
+    "start": "bun src/index${ts ? ".ts" : ".js"}",
+    "dev": "bun --hot --watch src/index${ts ? ".ts" : ".js"}",
+    "type-check": ${ts ? `"tsc --noEmit"` : `"echo 'No TypeScript configured'"`}
   },
   "repository": {
     "type": "git",
@@ -285,15 +330,16 @@ export let packageJson = ({ template, root, projectName, env, ts, useWS, choiceS
   },
   "homepage": "https://github.com/tezxjs/tezx-app-example",
   "dependencies": {
-    ${(ts ? `"typescript": "^5.8.2",` : "")}
-    "tezx": "^${version}"${env == 'node' ? `,\n    "tsx": "^4.19.2"` : ""}${useWS && env == 'node' ? `,\n    "ws": "^8.18.1"` : ""}${install.length ? `,\n    ${install?.join(",\n    ")}` : ""}
+    "tezx": "^${version}"${install.length ? `,\n    ${install.join(",\n    ")}` : ""}
   },
   "devDependencies": {
-    "@types/node": "^22.13.14"${env === "bun" ? `,\n"@types/bun": "^1.3.1"` : (env === 'deno' ? `,\n"@types/deno" : "^2.5.0"` : "")}
+    ${devDeps.join(",\n    ")}
   }
-}`.trim();
-  writeFileSync(join(root, 'package.json'), json);
 }
+`.trim();
+
+  writeFileSync(join(root, "package.json"), json);
+};
 
 
 export const gitignore = ({ root }: { root: string }) => {

@@ -19,5 +19,6 @@ const commonOptions = {
 build({
     ...commonOptions,
     format: 'esm',
+    minify: true,
     outfile: 'create-tezx/bin',
 });

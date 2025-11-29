@@ -15,4 +15,4 @@ export type TemplateReturnType = {
     files: { path: string, content: string }[]
 };
 
-export type TemplateFnObjectType = (env: string) => TemplateReturnType
+export type TemplateFnObjectType = TemplateReturnType

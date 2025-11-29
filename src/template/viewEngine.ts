@@ -1,8 +1,7 @@
 import { packageManagerCommands, TemplateFnObjectType } from "./utils.js";
 
-export const viewEngineTemplate: TemplateFnObjectType = () => {
-  return {
-    readme: `
+export const viewEngineTemplate: TemplateFnObjectType = {
+  readme: `
 # TezX View Engine Example
 
 This example demonstrates how to use the \`@tezx/view-engine\` package to render server-side views using template engines such as **EJS**, **Pug**, **Handlebars**, **Mustache**, or **Nunjucks**.
@@ -59,7 +58,7 @@ app.get("engine", async (ctx) => {
 Happy TezX templating! 🎉
 `.trim(),
 
-    content: `
+  content: `
 const views = new ViewEngine("ejs", "./views");
 
 app.get("engine", async (ctx) => {
@@ -71,9 +70,9 @@ app.get("engine", async (ctx) => {
 });
   `.trim(),
 
-    files: [
-      {
-        content: `
+  files: [
+    {
+      content: `
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -85,15 +84,14 @@ app.get("engine", async (ctx) => {
   </body>
 </html>
       `.trim(),
-        path: "views/home.ejs",
-      },
-    ],
+      path: "views/home.ejs",
+    },
+  ],
 
-    import: [`import { ViewEngine } from "@tezx/view-engine";`],
+  import: [`import { ViewEngine } from "@tezx/view-engine";`],
 
-    package: [
-      packageManagerCommands("@tezx/view-engine", "^1.0.3"),
-      packageManagerCommands("ejs", "^3.1.10"),
-    ],
-  }
+  package: [
+    packageManagerCommands("@tezx/view-engine", "^1.0.3"),
+    packageManagerCommands("ejs", "^3.1.10"),
+  ],
 };

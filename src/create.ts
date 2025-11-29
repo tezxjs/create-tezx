@@ -10,11 +10,10 @@ import { gitignore, index, packageJson, README } from "./utils/fileContent.js";
 import { version } from "./version.js";
 
 export type Config = {
-  directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "runtime" | "env" | "useStatic" | "staticFolder", string>
+  directory?: string, options: Record<"t" | "template" | 'i' | "install" | "p" | "pm" | "ts" | "useStatic" | "staticFolder", string>
 };
 
 export let packageManager = ["npm", "bun", "yarn", "pnpm"];
-export let runtime = ['node', 'bun', 'deno'];
 
 export function startLoader(text: string) {
   let i = 0;
@@ -60,11 +59,7 @@ export async function create(config: Config) {
 
   let projectName = path.basename(directory);
   const root = resolve(process.cwd(), directory);
-  // if (existsSync(root)) return console.log("❌ Folder already exists."), process.exit(1);
-
   let ts = !!options?.['ts'];
-  let checkEnv = (options?.["env"] || options?.["runtime"]);
-  const env = runtime?.includes(checkEnv) ? checkEnv : await arrowSelect(rl, "💻 Runtime?", runtime);
 
   let staticFolder = options?.['staticFolder'] || 'public';
   let useStatic = true;
@@ -83,7 +78,7 @@ export async function create(config: Config) {
       console.error(`ℹ️ Available templates: ${Object.keys(TemplateContent).join(", ")}`);
       process.exit(0);
     }
-    template = availableTemplate(env);
+    template = availableTemplate;
   }
   else {
     ts = !!(options?.['ts'] || (await ask("🟦 Use TypeScript? (y/N): ") as any).toLowerCase() === "y");
@@ -146,11 +141,16 @@ export async function create(config: Config) {
     template,
     root: root,
     ts: !!ts,
-    env: env,
     staticFolder: staticFolder,
     useStatic: useStatic
   })
-  packageJson({ projectName: projectName, env: env, root: root, ts: !!ts, template, choiceStep: choiceStep })
+  packageJson({
+    projectName: projectName,
+    root: root,
+    ts: !!ts,
+    template,
+    choiceStep: choiceStep
+  })
   gitignore({ root })
   README({ root, readme: template?.readme })
   rl.close();
@@ -171,7 +171,6 @@ export async function create(config: Config) {
     console.log(`📁 Template Name: ${colorText(templateName, "orange")}`);
   }
   console.log(`🟦 TypeScript: ${colorText(ts ? "Yes" : "No", ts ? "green" : "gray")}`);
-  console.log(`💻 Runtime: ${colorText(env, "blue")}`);
   console.log(`📁 Static Folder: ${colorText(useStatic ? staticFolder || "public" : "Not Used", useStatic ? "green" : "gray")}`);
   console.log(`📦 Package Manager: ${colorText(choice, "magenta")}`);
   console.log(`📥 Dependencies Installed: ${colorText(install ? "Yes" : "No", install ? "green" : "red")}\n`);

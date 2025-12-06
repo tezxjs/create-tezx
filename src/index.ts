@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Config, create, packageManager, runtime } from "./create.js";
+import { Config, create, packageManager } from "./create.js";
 import { showHelp } from "./showHelp.js";
 import { showVersion } from "./showVersion.js";
 

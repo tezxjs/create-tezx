@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import{execSync as B}from"node:child_process";import{mkdirSync as S,writeFileSync as q}from"node:fs";import k,{join as V,resolve as J}from"node:path";import W from"node:readline";var p=(n,s)=>({version:s,npm:["npm install",n],bun:["bun add",n],yarn:["yarn add",n],pnpm:["pnpm add",n]});var $={readme:`
+import { execSync as B } from "node:child_process"; import { mkdirSync as S, writeFileSync as q } from "node:fs"; import k, { join as V, resolve as J } from "node:path"; import W from "node:readline"; var p = (n, s) => ({ version: s, npm: ["npm install", n], bun: ["bun add", n], yarn: ["yarn add", n], pnpm: ["pnpm add", n] }); var $ = {
+  readme: `
 # \u{1F510} GitHub OAuth2 Example for TezX
 
 This example demonstrates how to implement GitHub OAuth2 login using \`@tezx/github-oauth2\`.
@@ -20,7 +21,7 @@ This example demonstrates how to implement GitHub OAuth2 login using \`@tezx/git
 ### 1. Install the required package
 
 \`\`\`bash
-${Object.values(p("@tezx/github-oauth2","^1.0.9"))?.filter(n=>typeof n!="string")?.join(`
+${Object.values(p("@tezx/github-oauth2", "^1.0.9"))?.filter(n => typeof n != "string")?.join(`
 #or
 `)}
 \`\`\`
@@ -91,7 +92,7 @@ app.get('/github/callback', verifyGithubToken({
 ---
 
 Login securely and build smarter auth with TezX! \u{1F680}
-`.trim(),content:`
+`.trim(), content: `
 // 1. Initialize OAuth2 client
 const client = GitHubOauthClient({
     clientId: process.env.GITHUB_CLIENT_ID,
@@ -121,8 +122,12 @@ app.get('/github/callback', verifyGithubToken({
 }), async (ctx) => {
     return ctx.json({ success: true });
 });
-  `.trim(),files:[{content:`GITHUB_CLIENT_ID=12323
-GITHUB_CLIENT_SECRET=234234`,path:".env"}],import:["import { GitHubOauthClient, getGithubOAuthURL, verifyGithubToken } from '@tezx/github-oauth2';"],package:[p("@tezx/github-oauth2","^1.0.9")]};var C={readme:`
+  `.trim(), files: [{
+    content: `GITHUB_CLIENT_ID=12323
+GITHUB_CLIENT_SECRET=234234`, path: ".env"
+  }], import: ["import { GitHubOauthClient, getGithubOAuthURL, verifyGithubToken } from '@tezx/github-oauth2';"], package: [p("@tezx/github-oauth2", "^1.0.9")]
+}; var C = {
+  readme: `
 # \u{1F510} Google OAuth2 Example for TezX
 
 This example demonstrates how to use \`@tezx/google-oauth2\` to implement Google OAuth2 login in your TezX app.
@@ -145,12 +150,12 @@ This example demonstrates how to use \`@tezx/google-oauth2\` to implement Google
 Choose your package manager and install:
 
 \`\`\`bash
-${Object.values(p("@tezx/google-oauth2","^1.0.13")).filter(n=>typeof n!="string").join(`
+${Object.values(p("@tezx/google-oauth2", "^1.0.13")).filter(n => typeof n != "string").join(`
 # or
 `)}
 
 # Plus Google OAuth SDK
-${Object.values(p("@googleapis/oauth2","^2.0.1")).filter(n=>typeof n!="string").join(`
+${Object.values(p("@googleapis/oauth2", "^2.0.1")).filter(n => typeof n != "string").join(`
 # or
 `)}
 \`\`\`
@@ -231,7 +236,7 @@ app.get('/auth/callback', verifyGoogleToken({
 > \u{1F4A1} Note: TezX OAuth2 uses stateful sessions or JWTs depending on your setup. It supports advanced callback hooks for full control.
 
 Secure your apps with Google the easy way \u{1F512}
-`.trim(),content:`
+`.trim(), content: `
 // 1. Initialize OAuth2 client
 const client = GoogleOauthClient({
   clientId: process.env.GOOGLE_CLIENT_ID,
@@ -279,9 +284,13 @@ app.get('/auth/callback', verifyGoogleToken({
 }), async (ctx) => {
   return ctx.json({ success: true });
 });
-`.trim(),files:[{content:`GOOGLE_CLIENT_ID=12323
+`.trim(), files: [{
+    content: `GOOGLE_CLIENT_ID=12323
 GOOGLE_CLIENT_SECRET=234234
-`,path:".env"}],import:['import { GoogleOauthClient, getGoogleOAuthURL, verifyGoogleToken } from "@tezx/google-oauth2";'],package:[p("@tezx/google-oauth2","^1.0.13"),p("@googleapis/oauth2","^2.0.1")]};var O={readme:`
+`, path: ".env"
+  }], import: ['import { GoogleOauthClient, getGoogleOAuthURL, verifyGoogleToken } from "@tezx/google-oauth2";'], package: [p("@tezx/google-oauth2", "^1.0.13"), p("@googleapis/oauth2", "^2.0.1")]
+}; var O = {
+  readme: `
 # TezX View Engine Example
 
 This example demonstrates how to use the \`@tezx/view-engine\` package to render server-side views using template engines such as **EJS**, **Pug**, **Handlebars**, **Mustache**, or **Nunjucks**.
@@ -336,7 +345,7 @@ app.get("engine", async (ctx) => {
 ---
 
 Happy TezX templating! \u{1F389}
-`.trim(),content:`
+`.trim(), content: `
 const views = new ViewEngine("ejs", "./views");
 
 app.get("engine", async (ctx) => {
@@ -346,7 +355,8 @@ app.get("engine", async (ctx) => {
     });
     return ctx.html(html);
 });
-  `.trim(),files:[{content:`
+  `.trim(), files: [{
+    content: `
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -357,7 +367,9 @@ app.get("engine", async (ctx) => {
     <p>Hello, <%= user.name %> \u{1F44B}</p>
   </body>
 </html>
-      `.trim(),path:"views/home.ejs"}],import:['import { ViewEngine } from "@tezx/view-engine";'],package:[p("@tezx/view-engine","^1.0.3"),p("ejs","^3.1.10")]};var L=`
+      `.trim(), path: "views/home.ejs"
+  }], import: ['import { ViewEngine } from "@tezx/view-engine";'], package: [p("@tezx/view-engine", "^1.0.3"), p("ejs", "^3.1.10")]
+}; var L = `
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -525,7 +537,8 @@ app.get("engine", async (ctx) => {
         </script>
     </body>
 </html>
-`,j={readme:`
+`, j = {
+    readme: `
 # \u{1F50C} TezX WebSocket Example
 
 This example demonstrates how to set up a WebSocket server using \`upgradeWebSocket\` from \`tezx/ws\`.
@@ -603,7 +616,7 @@ A simple HTML file is included in \`public/ws.html\`:
 ---
 
 Enjoy real-time power with TezX! \u26A1\uFE0F
-`.trim(),content:`
+`.trim(), content: `
 const socket = [];
 
 app.get(
@@ -640,8 +653,15 @@ app.get(
     return ctx.sendFile("public/ws.html");
   },
 );
-`.trim(),files:[{content:L,path:"public/ws.html"}],import:['import { upgradeWebSocket } from "tezx/ws";']};var T={minimal:{readme:"",content:"",files:[],import:[],package:[]},ws:j,"github-oauth2":$,"google-oauth2":C,"view-engine":O};import M from"node:readline";async function R(n,s,t){return new Promise(a=>{let o=0;M.emitKeypressEvents(process.stdin,n),process.stdin.isTTY&&process.stdin.setRawMode(!0);let l=()=>{process.stdout.write("\x1B[2J\x1B[0f"),console.log(s+` (Use \u2191 \u2193 arrows, Enter to confirm)
-`),t.forEach((c,r)=>{console.log(`${r===o?"\u{1F449}":"  "} ${r===o?"\x1B[36m":"\x1B[0m"}${c}\x1B[0m`)})},i=(c,r)=>{if(r.name==="up")o=(o-1+t.length)%t.length,l();else if(r.name==="down")o=(o+1)%t.length,l();else if(r.name==="return")return a(t[o])};l(),process.stdin.on("keypress",i)})}var I={reset:"\x1B[0m",bold:"\x1B[1m",underline:"\x1B[4m",gray:"\x1B[90m",white:"\x1B[97m",black:"\x1B[30m",red:"\x1B[31m",green:"\x1B[32m",yellow:"\x1B[33m",blue:"\x1B[34m",magenta:"\x1B[35m",cyan:"\x1B[36m",bgRed:"\x1B[41m",bgGreen:"\x1B[42m",bgYellow:"\x1B[43m",bgBlue:"\x1B[44m",bgMagenta:"\x1B[45m",bgCyan:"\x1B[46m",bgWhite:"\x1B[47m",orange:"\x1B[38;2;255;88;30m",bgOrange:"\x1B[48;2;255;88;30m"};function e(n,s){return`${I[s]}${n}${I.reset}`}import{mkdirSync as D,writeFileSync as y}from"node:fs";import{join as d}from"node:path";var g="4.0.3";var U=`
+`.trim(), files: [{ content: L, path: "public/ws.html" }], import: ['import { upgradeWebSocket } from "tezx/ws";']
+  }; var T = { minimal: { readme: "", content: "", files: [], import: [], package: [] }, ws: j, "github-oauth2": $, "google-oauth2": C, "view-engine": O }; import M from "node:readline"; async function R(n, s, t) {
+    return new Promise(a => {
+      let o = 0; M.emitKeypressEvents(process.stdin, n), process.stdin.isTTY && process.stdin.setRawMode(!0); let l = () => {
+        process.stdout.write("\x1B[2J\x1B[0f"), console.log(s + ` (Use \u2191 \u2193 arrows, Enter to confirm)
+`), t.forEach((c, r) => { console.log(`${r === o ? "\u{1F449}" : "  "} ${r === o ? "\x1B[36m" : "\x1B[0m"}${c}\x1B[0m`) })
+      }, i = (c, r) => { if (r.name === "up") o = (o - 1 + t.length) % t.length, l(); else if (r.name === "down") o = (o + 1) % t.length, l(); else if (r.name === "return") return a(t[o]) }; l(), process.stdin.on("keypress", i)
+    })
+  } var I = { reset: "\x1B[0m", bold: "\x1B[1m", underline: "\x1B[4m", gray: "\x1B[90m", white: "\x1B[97m", black: "\x1B[30m", red: "\x1B[31m", green: "\x1B[32m", yellow: "\x1B[33m", blue: "\x1B[34m", magenta: "\x1B[35m", cyan: "\x1B[36m", bgRed: "\x1B[41m", bgGreen: "\x1B[42m", bgYellow: "\x1B[43m", bgBlue: "\x1B[44m", bgMagenta: "\x1B[45m", bgCyan: "\x1B[46m", bgWhite: "\x1B[47m", orange: "\x1B[38;2;255;88;30m", bgOrange: "\x1B[48;2;255;88;30m" }; function e(n, s) { return `${I[s]}${n}${I.reset}` } import { mkdirSync as D, writeFileSync as x } from "node:fs"; import { join as d } from "node:path"; var g = "4.0.7"; var U = `
 # \u26A1 TezX \u2013 High-Performance JavaScript Framework for **Bun**
 
 **TezX** is a modern, ultra-fast, and lightweight JavaScript framework built specifically for **Bun**.
@@ -832,7 +852,8 @@ Your support helps improve the framework.
 
 ---
 
-`,G=({ts:n,template:s,root:t,useStatic:a=!1,staticFolder:o})=>{let l=d(t,n?"src/index.ts":"src/index.js");D(d(t,"src"),{recursive:!0});let i="";s?.import?.push('import { wsHandlers } from "tezx/ws";'),i=`
+`, G = ({ ts: n, template: s, root: t, useStatic: a = !1, staticFolder: o }) => {
+      let l = d(t, n ? "src/index.ts" : "src/index.js"); D(d(t, "src"), { recursive: !0 }); let i = ""; s?.import?.push('import { wsHandlers } from "tezx/ws";'), i = `
 let PORT = Number(process.env.PORT) || 3000;
 Bun.serve({
   port: PORT,
@@ -845,26 +866,26 @@ Bun.serve({
   })
 });
 console.log(\`\u{1F680} TezX is running at http://localhost:\${PORT}\`);
-    `;let c=`
+    `; let c = `
 import { TezX } from "tezx";
 import { serveStatic } from "tezx/static";
 import { logger } from "tezx/middleware";
 ${s?.import?.join(`
 `)}
 const app = new TezX({
-    debugMode: true,
     // Additional options
 });
 app.use([logger()]);
 
 app.get("/", (ctx) => ctx.text("Hello from TezX"));
 
-${a?`app.static(serveStatic("${o||"public"}"));`:""}
-${s?.content?`
+${a ? `app.static(serveStatic("${o || "public"}"));` : ""}
+${s?.content ? `
 ${s?.content?.trim()}
-`:""}
+`: ""}
 ${i}
-`;if(n){let r=`
+`; if (n) {
+        let r = `
 {
   "compilerOptions": {
     "module": "esnext",
@@ -878,16 +899,19 @@ ${i}
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
-    `.trim();y(d(t,"tsconfig.json"),r)}y(l,c.trim())},A=({template:n,root:s,projectName:t,ts:a,useWS:o,choiceStep:l})=>{let i=[];Array.isArray(n?.package)&&n?.package?.forEach(h=>{let{version:b,npm:m}=h||{};i.push(`"${m?.[1]}": "${b}"`)});let c=['"@types/bun": "^1.3.1"'];a&&(c.push('"typescript": "^5.8.2"'),c.push('"@types/node": "^22.13.14"'));let r=`
+    `.trim(); x(d(t, "tsconfig.json"), r)
+      } x(l, c.trim())
+    }, A = ({ template: n, root: s, projectName: t, ts: a, useWS: o, choiceStep: l }) => {
+      let i = []; Array.isArray(n?.package) && n?.package?.forEach(h => { let { version: b, npm: m } = h || {}; i.push(`"${m?.[1]}": "${b}"`) }); let c = ['"@types/bun": "^1.3.1"']; a && (c.push('"typescript": "^5.8.2"'), c.push('"@types/node": "^22.13.14"')); let r = `
 {
-  "name": "${t||"tezx-app-example"}",
+  "name": "${t || "tezx-app-example"}",
   "version": "1.0.0",
   "type": "module",
   "description": "TezX is a high-performance, lightweight JavaScript framework designed for speed, scalability, and flexibility. It enables efficient routing, middleware management, and static file serving with minimal configuration.",
   "scripts": {
-    "start": "bun src/index${a?".ts":".js"}",
-    "dev": "bun --hot --watch src/index${a?".ts":".js"}",
-    "type-check": ${a?'"tsc --noEmit"':`"echo 'No TypeScript configured'"`}
+    "start": "bun src/index${a ? ".ts" : ".js"}",
+    "dev": "bun --hot --watch src/index${a ? ".ts" : ".js"}",
+    "type-check": ${a ? '"tsc --noEmit"' : `"echo 'No TypeScript configured'"`}
   },
   "repository": {
     "type": "git",
@@ -901,16 +925,18 @@ ${i}
   },
   "homepage": "https://github.com/tezxjs/tezx-app-example",
   "dependencies": {
-    "tezx": "^${g}"${i.length?`,
+    "tezx": "^${g}"${i.length ? `,
     ${i.join(`,
-    `)}`:""}
+    `)}` : ""}
   },
   "devDependencies": {
     ${c.join(`,
     `)}
   }
 }
-`.trim();y(d(s,"package.json"),r)},H=({root:n})=>{let s=`
+`.trim(); x(d(s, "package.json"), r)
+    }, H = ({ root: n }) => {
+      let s = `
 # Node dependencies
 node_modules/
 .env
@@ -980,49 +1006,58 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
-  `.trim();y(d(n,".gitignore"),s,{encoding:"utf8"})},P=({root:n,readme:s})=>{let t=typeof s=="string"&&s?s?.trim():U.trim();y(d(n,"README.md"),t,{encoding:"utf8"})};var w=["npm","bun","yarn","pnpm"];function Y(n){let s=0,t=["\u280B","\u2819","\u2839","\u2838","\u283C","\u2834","\u2826","\u2827","\u2807","\u280F"],a=setInterval(()=>{process.stdout.write(`\r${t[s=++s%t.length]} ${n}`)},80);return()=>{clearInterval(a),process.stdout.write(`\r\u2705 Done!                             
-`)}}var z=W.createInterface({input:process.stdin,output:process.stdout});W.emitKeypressEvents(process.stdin);process.stdin.isTTY&&process.stdin.setRawMode(!0);var x=(n,s="")=>new Promise(t=>{z.question(s?`${n} (${s}): `:n,a=>{t(a.trim()||s)})});async function _(n){let s=n?.directory,t=n?.options;console.log(e(`
-\u26A1 TezX App Creator(v${g})`,"orange")),s||(s=await x(e("\u{1F4E6} Project name: ","magenta")),s||(console.log(e("\u274C Project name required.","red")),process.exit(0)));let a=k.basename(s),o=J(process.cwd(),s),l=!!t?.ts,i=t?.staticFolder||"public",c=!0,r={content:"",import:[],readme:"",files:[]};if(t?.t||t?.template){let u=t.t||t.template,v=T?.[u];v||(console.error(`\u274C Unknown template: "${u}"`),console.error(`\u2139\uFE0F Available templates: ${Object.keys(T).join(", ")}`),process.exit(0)),r=v}else l=!!(t?.ts||(await x("\u{1F7E6} Use TypeScript? (y/N): ")).toLowerCase()==="y"),c=!!t?.useStatic||(await x("\u{1F4C1} Use static folder? (y/N): ")).toLowerCase()==="y",i=c?t?.staticFolder||await x("\u{1F4C2} Static folder name? (default: public): "):"";let h=t?.pm||t?.p,b=w?.includes(h)?h:await R(z,"\u{1F4E6} Choose your package manager",w),m=t?.i==="true"||t?.install==="true"||(await x("\u{1F4E5} Install dependencies now? (y/N): ")).toLowerCase()==="y";console.log(`
+  `.trim(); x(d(n, ".gitignore"), s, { encoding: "utf8" })
+    }, P = ({ root: n, readme: s }) => { let t = typeof s == "string" && s ? s?.trim() : U.trim(); x(d(n, "README.md"), t, { encoding: "utf8" }) }; var w = ["npm", "bun", "yarn", "pnpm"]; function Y(n) {
+      let s = 0, t = ["\u280B", "\u2819", "\u2839", "\u2838", "\u283C", "\u2834", "\u2826", "\u2827", "\u2807", "\u280F"], a = setInterval(() => { process.stdout.write(`\r${t[s = ++s % t.length]} ${n}`) }, 80); return () => {
+        clearInterval(a), process.stdout.write(`\r\u2705 Done!                             
+`)
+      }
+    } var z = W.createInterface({ input: process.stdin, output: process.stdout }); W.emitKeypressEvents(process.stdin); process.stdin.isTTY && process.stdin.setRawMode(!0); var y = (n, s = "") => new Promise(t => { z.question(s ? `${n} (${s}): ` : n, a => { t(a.trim() || s) }) }); async function _(n) {
+      let s = n?.directory, t = n?.options; console.log(e(`
+\u26A1 TezX App Creator(v${g})`, "orange")), s || (s = await y(e("\u{1F4E6} Project name: ", "magenta")), s || (console.log(e("\u274C Project name required.", "red")), process.exit(0))); let a = k.basename(s), o = J(process.cwd(), s), l = !!t?.ts, i = t?.staticFolder || "public", c = !0, r = { content: "", import: [], readme: "", files: [] }; if (t?.t || t?.template) { let u = t.t || t.template, v = T?.[u]; v || (console.error(`\u274C Unknown template: "${u}"`), console.error(`\u2139\uFE0F Available templates: ${Object.keys(T).join(", ")}`), process.exit(0)), r = v } else l = !!(t?.ts || (await y("\u{1F7E6} Use TypeScript? (y/N): ")).toLowerCase() === "y"), c = !!t?.useStatic || (await y("\u{1F4C1} Use static folder? (y/N): ")).toLowerCase() === "y", i = c ? t?.staticFolder || await y("\u{1F4C2} Static folder name? (default: public): ") : ""; let h = t?.pm || t?.p, b = w?.includes(h) ? h : await R(z, "\u{1F4E6} Choose your package manager", w), m = t?.i === "true" || t?.install === "true" || (await y("\u{1F4E5} Install dependencies now? (y/N): ")).toLowerCase() === "y"; console.log(`
 \u{1F4C1} Creating project: ${a}...
-`);let X=Y("Creating Project");if(S(o,{recursive:!0}),c){let u=V(o,i||"public");S(u,{recursive:!0})}let f={bun:{cd:"cd "+s,install:"bun install",dev:"bun dev",build:"bun build:esm && bun build:dts"},npm:{cd:"cd "+s,install:"npm install",dev:"npm run dev",build:"npm run build:esm && npm run build:dts"},yarn:{cd:"cd "+s,install:"yarn",dev:"yarn dev",build:"yarn build:esm && yarn build:dts"},pnpm:{cd:"cd "+s,install:"pnpm install",dev:"pnpm run dev",build:"pnpm run build:esm && pnpm run build:dts"}}[b];G({template:r,root:o,ts:!!l,staticFolder:i,useStatic:c}),A({projectName:a,root:o,ts:!!l,template:r,choiceStep:f}),H({root:o}),P({root:o,readme:r?.readme}),z.close(),r?.files?.forEach(u=>{let v=k.join(o,k.dirname(u?.path));S(v,{recursive:!0}),q(k.join(o,u?.path),u?.content)}),m&&B(f?.install,{cwd:o,stdio:"inherit"}),console.log(e(`
+`); let X = Y("Creating Project"); if (S(o, { recursive: !0 }), c) { let u = V(o, i || "public"); S(u, { recursive: !0 }) } let f = { bun: { cd: "cd " + s, install: "bun install", tezx: "bun add tezx@latest", dev: "bun dev", build: "bun build:esm && bun build:dts" }, npm: { cd: "cd " + s, install: "npm install", tezx: "npm install tezx@latest", dev: "npm run dev", build: "npm run build:esm && npm run build:dts" }, yarn: { cd: "cd " + s, install: "yarn", tezx: "yarn add tezx@latest", dev: "yarn dev", build: "yarn build:esm && yarn build:dts" }, pnpm: { cd: "cd " + s, install: "pnpm install", tezx: "pnpm add tezx@latest", dev: "pnpm run dev", build: "pnpm run build:esm && pnpm run build:dts" } }[b]; G({ template: r, root: o, ts: !!l, staticFolder: i, useStatic: c }), A({ projectName: a, root: o, ts: !!l, template: r, choiceStep: f }), H({ root: o }), P({ root: o, readme: r?.readme }), z.close(), r?.files?.forEach(u => { let v = k.join(o, k.dirname(u?.path)); S(v, { recursive: !0 }), q(k.join(o, u?.path), u?.content) }), m && B(f?.install, { cwd: o, stdio: "inherit" }), console.log(e(`
 \u2705 TezX project "${a}" is ready!
-`,"green")),console.log(e("\u{1F9F0} Summary of your configuration:","cyan")),console.log(`\u{1F4C1} Project Name: ${e(a,"yellow")}`);let E=t?.t||t?.template;E&&console.log(`\u{1F4C1} Template Name: ${e(E,"orange")}`),console.log(`\u{1F7E6} TypeScript: ${e(l?"Yes":"No",l?"green":"gray")}`),console.log(`\u{1F4C1} Static Folder: ${e(c?i||"public":"Not Used",c?"green":"gray")}`),console.log(`\u{1F4E6} Package Manager: ${e(b,"magenta")}`),console.log(`\u{1F4E5} Dependencies Installed: ${e(m?"Yes":"No",m?"green":"red")}
-`),console.log(e("\u{1F449} Next Steps:","cyan")),console.log(e(`   ${f?.cd}`,"white")),m||console.log(e(`   ${f?.install}`,"white")),console.log(e(`   ${f?.dev}`,"white")),console.log(""),X(),process.exit(0)}function F(){console.log(`
-        ${e("\u256D\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256E","gray")}
-        ${e("\u2502","gray")}${e("   \u26A1 Create TezX","yellow")} - Scaffold your next backend app     ${e("\u2502","gray")}
-        ${e("\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256F","gray")}
+`, "green")), console.log(e("\u{1F9F0} Summary of your configuration:", "cyan")), console.log(`\u{1F4C1} Project Name: ${e(a, "yellow")}`); let E = t?.t || t?.template; E && console.log(`\u{1F4C1} Template Name: ${e(E, "orange")}`), console.log(`\u{1F7E6} TypeScript: ${e(l ? "Yes" : "No", l ? "green" : "gray")}`), console.log(`\u{1F4C1} Static Folder: ${e(c ? i || "public" : "Not Used", c ? "green" : "gray")}`), console.log(`\u{1F4E6} Package Manager: ${e(b, "magenta")}`), console.log(`\u{1F4E5} Dependencies Installed: ${e(m ? "Yes" : "No", m ? "green" : "red")}
+`), console.log(e("\u{1F449} Next Steps:", "cyan")), console.log(e(`   ${f?.cd}`, "white")), m || console.log(e(`   ${f?.install}`, "white")), console.log(e(`   ${f?.dev}`, "white")), console.log(""), X(), process.exit(0)
+    } function F() {
+      console.log(`
+        ${e("\u256D\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256E", "gray")}
+        ${e("\u2502", "gray")}${e("   \u26A1 Create TezX", "yellow")} - Scaffold your next backend app     ${e("\u2502", "gray")}
+        ${e("\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256F", "gray")}
         
-        ${e("\u{1F4E6} Usage:","cyan")} 
-         ${e("create-tezx","green")} ${e("[directory] [...options]","gray")}
+        ${e("\u{1F4E6} Usage:", "cyan")} 
+         ${e("create-tezx", "green")} ${e("[directory] [...options]", "gray")}
         
-        ${e("\u{1F680} Quick Start:","cyan")}
-          ${e("npm","magenta")} create tezx@latest
-          ${e("yarn","magenta")} create tezx
-          ${e("pnpm","magenta")} create tezx@latest
-          ${e("bun","magenta")} create tezx@latest
+        ${e("\u{1F680} Quick Start:", "cyan")}
+          ${e("npm", "magenta")} create tezx@latest
+          ${e("yarn", "magenta")} create tezx
+          ${e("pnpm", "magenta")} create tezx@latest
+          ${e("bun", "magenta")} create tezx@latest
         
-        ${e("\u{1F39B}\uFE0F  Options:","cyan")}
+        ${e("\u{1F39B}\uFE0F  Options:", "cyan")}
         
-          ${e("-t, --template <name>","green")}    Use a specific starter template
-          ${e("--ts, -ts","green")}                Enable TypeScript setup
-          ${e("-p, --pm <manager>","green")}       Package manager: npm | bun | yarn | pnpm
-          ${e("-i, --install","green")}            Automatically install dependencies
-          ${e("-y, --yes","green")}                Skip prompts using default options
-          ${e("-v, --version","green")}            Show CLI version
-          ${e("-h, --help","green")}               Display this help message
+          ${e("-t, --template <name>", "green")}    Use a specific starter template
+          ${e("--ts, -ts", "green")}                Enable TypeScript setup
+          ${e("-p, --pm <manager>", "green")}       Package manager: npm | bun | yarn | pnpm
+          ${e("-i, --install", "green")}            Automatically install dependencies
+          ${e("-y, --yes", "green")}                Skip prompts using default options
+          ${e("-v, --version", "green")}            Show CLI version
+          ${e("-h, --help", "green")}               Display this help message
         
-        ${e("\u{1F9F0} Examples:","cyan")}
-          ${e("npm create tezx@latest my-app --template ws --ts","gray")}
-          ${e("bun create tezx@latest -- --install --pm bun","gray")}
+        ${e("\u{1F9F0} Examples:", "cyan")}
+          ${e("npm create tezx@latest my-app --template ws --ts", "gray")}
+          ${e("bun create tezx@latest -- --install --pm bun", "gray")}
         
-        ${e("\u{1F4C1} Available Templates:","cyan")}
-          ${e("minimal","yellow")}         Minimal TypeScript setup
-          ${e("ws","yellow")}              Built-in WebSocket server
-          ${e("google-oauth2","yellow")}   Google OAuth2 Authentication
-          ${e("github-oauth2","yellow")}   GitHub OAuth2 Authentication
+        ${e("\u{1F4C1} Available Templates:", "cyan")}
+          ${e("minimal", "yellow")}         Minimal TypeScript setup
+          ${e("ws", "yellow")}              Built-in WebSocket server
+          ${e("google-oauth2", "yellow")}   Google OAuth2 Authentication
+          ${e("github-oauth2", "yellow")}   GitHub OAuth2 Authentication
         
-        ${e("\u{1F517} Repository:","cyan")}
-          ${e("https://github.com/tezxjs/tezx","underline")}
+        ${e("\u{1F517} Repository:", "cyan")}
+          ${e("https://github.com/tezxjs/tezx", "underline")}
         
-        ${e("\u{1F9D1}\u200D\u{1F4BB} Author:","cyan")}
-          Rakibul Islam ${e("<https://github.com/srakib17>","blue")}`),process.exit(0)}function N(){console.log(`TezX CLI v${g}`),process.exit(0)}(async()=>{let n=(l,i)=>{i.name==="c"&&i.ctrl&&(process.stdin.off("keypress",n),process.stdin.isTTY&&process.stdin.setRawMode(!1),process.exit(0))};process.stdin.on("keypress",n);let s=process.argv.slice(2),t={},a;for(let l=0;l<s.length;l++){let i=s[l];if(i.startsWith("--")){let c=i.slice(2),r=s[l+1];r&&!r.startsWith("-")?(t[c]=r,l++):t[c]="true"}else if(i.startsWith("-")){let c=i.slice(1),r=s[l+1];r&&!r.startsWith("-")?(t[c]=r,l++):t[c]="true"}else a||(a=i)}let o={directory:a,options:t};if((t.y==="true"||t.yes==="true")&&(o.options.ts="true",o.options.useStatic="true",o.options.staticFolder="public",o.options.pm=w?.includes(o.options?.p||o?.options?.pm)?o.options?.p||o?.options?.pm:"npm",o.options.p=w?.includes(o.options?.p||o?.options?.pm)?o.options?.p||o?.options?.pm:"npm",o.options.install="true"),t.help||t.h){F();return}if(t.v||t.version){N();return}_(o)})();
+        ${e("\u{1F9D1}\u200D\u{1F4BB} Author:", "cyan")}
+          Rakibul Islam ${e("<https://github.com/srakib17>", "blue")}`), process.exit(0)
+    } function N() { console.log(`TezX CLI v${g}`), process.exit(0) } (async () => { let n = (l, i) => { i.name === "c" && i.ctrl && (process.stdin.off("keypress", n), process.stdin.isTTY && process.stdin.setRawMode(!1), process.exit(0)) }; process.stdin.on("keypress", n); let s = process.argv.slice(2), t = {}, a; for (let l = 0; l < s.length; l++) { let i = s[l]; if (i.startsWith("--")) { let c = i.slice(2), r = s[l + 1]; r && !r.startsWith("-") ? (t[c] = r, l++) : t[c] = "true" } else if (i.startsWith("-")) { let c = i.slice(1), r = s[l + 1]; r && !r.startsWith("-") ? (t[c] = r, l++) : t[c] = "true" } else a || (a = i) } let o = { directory: a, options: t }; if ((t.y === "true" || t.yes === "true") && (o.options.ts = "true", o.options.useStatic = "true", o.options.staticFolder = "public", o.options.pm = w?.includes(o.options?.p || o?.options?.pm) ? o.options?.p || o?.options?.pm : "npm", o.options.p = w?.includes(o.options?.p || o?.options?.pm) ? o.options?.p || o?.options?.pm : "npm", o.options.install = "true"), t.help || t.h) { F(); return } if (t.v || t.version) { N(); return } _(o) })();

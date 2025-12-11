@@ -233,7 +233,6 @@ import { serveStatic } from "tezx/static";
 import { logger } from "tezx/middleware";
 ${template?.import?.join("\n")}
 const app = new TezX({
-    debugMode: true,
     // Additional options
 });
 app.use([logger()]);

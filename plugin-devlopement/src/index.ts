@@ -4,8 +4,7 @@ import { logger } from "tezx/middleware";
 import { ViewEngine } from "@tezx/view-engine";
 import { wsHandlers } from "tezx/ws";
 const app = new TezX({
-    debugMode: true,
-    // Additional options
+  // Additional options
 });
 app.use([logger()]);
 
@@ -16,11 +15,11 @@ app.static(serveStatic("public"));
 const views = new ViewEngine("ejs", "./views");
 
 app.get("engine", async (ctx) => {
-    const html = await views.render("home", {
-        title: "TezX SSR Page",
-        user: ctx.user || { name: "Guest" },
-    });
-    return ctx.html(html);
+  const html = await views.render("home", {
+    title: "TezX SSR Page",
+    user: ctx.user || { name: "Guest" },
+  });
+  return ctx.html(html);
 });
 
 

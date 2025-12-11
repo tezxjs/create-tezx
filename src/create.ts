@@ -107,29 +107,35 @@ export async function create(config: Config) {
     //   writeFileSync(join(staticDir, "index.html"), "<h1>Welcome to TezX Static</h1>");
   }
   // Customize main.ts file
-
   const step = {
     bun: {
       cd: "cd " + directory,
       install: "bun install",
+      tezx: "bun add tezx@latest",
       dev: "bun dev",
       build: "bun build:esm && bun build:dts",
     },
+
     npm: {
       cd: "cd " + directory,
       install: "npm install",
+      tezx: "npm install tezx@latest",
       dev: "npm run dev",
       build: "npm run build:esm && npm run build:dts",
     },
+
     yarn: {
       cd: "cd " + directory,
       install: "yarn",
+      tezx: "yarn add tezx@latest",
       dev: "yarn dev",
       build: "yarn build:esm && yarn build:dts",
     },
+
     pnpm: {
       cd: "cd " + directory,
       install: "pnpm install",
+      tezx: "pnpm add tezx@latest",
       dev: "pnpm run dev",
       build: "pnpm run build:esm && pnpm run build:dts",
     }
